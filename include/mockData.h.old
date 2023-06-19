@@ -1,0 +1,81 @@
+/********
+*Author: Baran Bodur
+*Date: 2021-07-13
+*Description: Create and store a set of (mock-)data
+*
+********/
+#ifndef MOCKDATA_INCLUDED
+#define MOCKDATA_INCLUDED
+
+// c++ headers
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <algorithm>
+#include <functional>
+#include <numeric>
+#include <vector>
+// ROOT headers
+#include "TMath.h"
+#include "TFile.h"
+#include "TTree.h"
+#include "TH1F.h"
+#include "TH2F.h"
+#include "TString.h"
+#include "TRandom3.h"
+// Project Headers
+#include "fitPdf.h"
+
+class FitPdf;
+
+struct DataPoint{
+	float eVis;
+	float gTag;
+	int nTag;
+	float weight;
+	float cosZen;
+	float azi;
+};
+
+void printDataPoint(DataPoint dP);
+
+class MockData{
+public:
+	// Constructor
+	MockData(TString inName, const int nPdf, FitPdf *inPdf[], bool poisson=true);
+	
+	//Destructor
+	~MockData();
+
+	// Public Functions
+	void printEvent(unsigned int eNo);
+	void initProjHists(FitPdf *inPdf); // init data proj. histograms based on histograms in inPdf
+	void fillProjHists(); // fills data histograms with created mock data
+	void saveProjHists(TFile* inFile); // save data histograms
+	void doProjHists(TFile* inFile, FitPdf *inPdf); // function to do 3 steps (init,fill,save) at once
+	
+	
+	// Public Variables
+	std::vector<DataPoint> dataPoint;
+	unsigned int nPoints;
+	float totalWeight;
+	std::vector<unsigned int> byTypeEvents;
+	int nType;
+	TString name;
+	
+	// Public projection hists
+	TH1D *hEvisProjN0, *hEvisProjN1, *hEvisProjNall;
+	TH1D *hGtagProjN0, *hGtagProjN1, *hGtagProjNall;
+	TH1D *hNtagProj;
+	TH1D *hCosZenProj, *hAziProj;
+	std::vector<TH1D*> projHists;	
+	TH2F *hEgN0, *hEgN1, *hEgNall;
+
+private:
+	// Private Variables
+	TRandom3* randAlThor; //need rng
+	bool histFlag = false;
+
+
+};
+#endif

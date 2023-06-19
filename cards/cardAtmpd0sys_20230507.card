@@ -1,0 +1,514 @@
+#### EXAMPLE CARD FILE FOR NU_E - 16O FITTER WITH SYSTEMATICS
+#
+#######
+# INITIAL SECTION
+#######
+#
+# Name of the card file
+CARD_NAME cardAtmpd0sys_20230507.card
+#
+# Will random data be generated?: 
+# If 1 (true) generate random data within the fitter to study fit performance
+# If 0 (false) get data to fit from: dataFiles and dataTrees
+GEN_RAND_DATA 1
+#
+# Will generated data have Poission fluctuations? 0: no, 1: yes
+N_EVENTS_POISSON 1
+#
+# When generating random data, will generating value of systematics be used (0) or systematics
+# will be randomly determined (1) according to a Gaussion dist (given sigma, mean at gen value)
+RAND_SYSTEMATICS 1
+#
+# When fitting will systematics be free (0) or fixed by the fitter to their true values (1)
+FIX_SYSTEMATICS 0
+#
+# Default: 0 , if 1 for testing purposes make a fit with main variable (first interaction) 
+# fixed at its initial (true) value. Can be used to compare NLL difference...
+DO_MAIN_FIXED_FIT 0 
+#
+# Whether to do a reweight fitting with same mock data to see the effect of one particular sys.
+# When running this try to minimize all randomness, no poission fluctutations or random sys.
+# Systematics should be generated at 0 by default
+# Then fit to mock data that way
+# Reweight that mock data by moving 1 systematic to 1 sigma determined by REWEIGHT_FIT_SYS_INDEX
+# Fit the same mock data (but each point having some weight different than 1.0)
+DO_REWEIGHT_FIT 0
+#
+# This does not matter unless DO_REWEIGHT_FIT is set to 1 (see above)
+# Decides reweighting will be done according to which systematic being at 1 sigma
+# Systematics should all be generated at 0 (no random sys)
+# This is index in c++ code, so 1st systematic would have an index of 0 etc...
+REWEIGHT_FIT_SYS_INDEX 0
+#
+# Saves binned fit and sim distributions and mock data
+# Also calculates chi2 with binned data
+SAVE_BINNED_FIT_RESULTS 1
+#
+# Random number seed for ROOT TRandom3 generator
+#RAND_SEED 871642904
+RAND_SEED 0
+#	
+# How many initial points each fit will start and minimize from
+# At the end the result with minimum NLL wil be selected as usual
+# This is to circumvent issues with being stuck in a local minima
+# If set to 1 only 1 fit will be performed starting from the prescribed initial values
+N_SUBFIT 1
+#
+# Number of random datasets to be generated and fits to be performed to them
+N_FIT 1
+#
+# Number of fits for which graphs (stacked histograms etc.) to be saved
+N_GRAPH 1
+#
+# Number of fits for which profile likelihood method will be applied
+N_PROFILE 0
+#
+# Which fit parameter to do the profile fit for
+PROF_INDEX 0
+# Start of profile steps
+PROF_START 0.0
+# End of profile steps
+PROF_END 2.0
+# Profile step size
+PROF_STEP 0.05
+#
+# Whether to make pdf files for sys 1 sigma effect plots
+MAKE_SYS_EFFECT_PLOTS 0
+#
+#######
+# EXPERIMENT SECTION
+#######
+#
+# Number of different experiments (SK1, SK2, ...etc.) to be used
+# Always define it first
+N_EXP 5
+#
+# Names of experiments
+01_EXP_NAME SK1
+02_EXP_NAME SK2
+03_EXP_NAME SK3
+04_EXP_NAME SK4
+05_EXP_NAME SK5
+#	
+# Root filenames for experiment MC trees
+01_EXP_FILE X 
+02_EXP_FILE X
+03_EXP_FILE X
+04_EXP_FILE X
+05_EXP_FILE X
+#
+# Tree names within the root files
+01_EXP_TREE fitTree
+02_EXP_TREE fitTree
+03_EXP_TREE fitTree
+04_EXP_TREE fitTree
+05_EXP_TREE fitTree
+#
+# Whether to use neutron info for a given experiment: 0=No, 1=Yes
+01_NEUTRON_INFO 0
+02_NEUTRON_INFO 0
+03_NEUTRON_INFO 0
+04_NEUTRON_INFO 1
+05_NEUTRON_INFO 1
+#
+# Whether to use gamma info for a given experiment: 0=No, 1=Yes
+01_GAMMA_INFO 1
+02_GAMMA_INFO 1
+03_GAMMA_INFO 1
+04_GAMMA_INFO 1
+05_GAMMA_INFO 1
+#
+# Whether to use direction info for a given experiment: 0=No, 1=Yes 
+# Not supported for this version of the fitter (Choose 0), tested using direction info before
+# It does not improve the fit significantly (Estimated error goes from 41% o 40.5% etc.)
+# But adds much complexity, especially with systematics related to directionaility etc...
+01_DIR_INFO 0
+02_DIR_INFO 0
+03_DIR_INFO 0
+04_DIR_INFO 0
+05_DIR_INFO 0
+#	
+# Lower edge of visible	energy considered in fittingi (MeV)
+01_EVIS_LOW 30.0
+02_EVIS_LOW 30.0
+03_EVIS_LOW 30.0
+04_EVIS_LOW 30.0
+05_EVIS_LOW 30.0
+#
+# Upper edge of visible	energy considered in fitting (MeV)
+01_EVIS_UP 200.0
+02_EVIS_UP 200.0
+03_EVIS_UP 200.0
+04_EVIS_UP 200.0
+05_EVIS_UP 200.0
+#	
+# Lower edge of visible	energy considered in preparing PDFs with KDEs
+# Should be more inclusive than edges used in PDFs: If PDF edge is at 30 MeV, in a KDE an event at
+# 29 MeV may contribute to shape of PDF around 30 MeV
+01_EVIS_LOW_BUF 20.0
+02_EVIS_LOW_BUF 20.0
+03_EVIS_LOW_BUF 20.0
+04_EVIS_LOW_BUF 20.0
+05_EVIS_LOW_BUF 20.0
+#	
+# Upper edge of visible	energy considered in preparing PDFs with KDEs
+# Same idea as lower buffer edge
+01_EVIS_UP_BUF 225.0
+02_EVIS_UP_BUF 225.0
+03_EVIS_UP_BUF 225.0
+04_EVIS_UP_BUF 225.0
+05_EVIS_UP_BUF 225.0
+#
+# Number of bins in normalization histograms: If PDFs need to be normalized (numerically)
+# they will be cast into histograms and scaled
+01_EVIS_BINS_NORM 170
+02_EVIS_BINS_NORM 170
+03_EVIS_BINS_NORM 170
+04_EVIS_BINS_NORM 170
+05_EVIS_BINS_NORM 170
+#
+# Number of bins in projection histograms (For making stacked plots etc). Since mock (or real)
+# data may have low statistics, better to have larger bin size than norm histograms (5-10 MeV)
+# Correction: This si the rebin factor: number of bins in prj hist = bins in norm hist/rebin factor
+01_EVIS_PROJ_REBIN_FACTOR 5
+02_EVIS_PROJ_REBIN_FACTOR 5
+03_EVIS_PROJ_REBIN_FACTOR 5
+04_EVIS_PROJ_REBIN_FACTOR 5
+05_EVIS_PROJ_REBIN_FACTOR 5
+#
+# Lower edge of gamma tag considered in fitting (dimless)
+01_GTAG_LOW -2.0
+02_GTAG_LOW -2.0
+03_GTAG_LOW -2.0
+04_GTAG_LOW -2.0
+05_GTAG_LOW -2.0
+#
+# Upper edge of gamma tag considered in fitting (dimless)
+01_GTAG_UP 2.0
+02_GTAG_UP 2.0
+03_GTAG_UP 2.0
+04_GTAG_UP 2.0
+05_GTAG_UP 2.0
+#	
+# Lower edge of gamma tag considered in preparing PDFs with KDEs
+# Should be more inclusive than edges used in PDFs: If PDF edge is at 2, in a KDE an event at
+# 2.05 can contribute to value at 2
+01_GTAG_LOW_BUF -2.1
+02_GTAG_LOW_BUF -2.1
+03_GTAG_LOW_BUF -2.1
+04_GTAG_LOW_BUF -2.1
+05_GTAG_LOW_BUF -2.1
+#	
+# Upper edge of gamma tag considered in preparing PDFs with KDEs
+# Same idea as lower buffer edge
+01_GTAG_UP_BUF 2.1
+02_GTAG_UP_BUF 2.1
+03_GTAG_UP_BUF 2.1
+04_GTAG_UP_BUF 2.1
+05_GTAG_UP_BUF 2.1
+#
+# Number of bins in normalization histograms: If PDFs need to be normalized (numerically)
+# they will be cast into histograms and scaled
+01_GTAG_BINS_NORM 80
+02_GTAG_BINS_NORM 80
+03_GTAG_BINS_NORM 80
+04_GTAG_BINS_NORM 80
+05_GTAG_BINS_NORM 80
+#
+# Number of bins in projection histograms (For making stacked plots etc). Since mock (or real)
+# data may have low statistics, better to have larger bin size than norm histograms (0.1 gtag)
+# Correction: This si the rebin factor: number of bins in prj hist = bins in norm hist/rebin factor
+01_GTAG_PROJ_REBIN_FACTOR 2
+02_GTAG_PROJ_REBIN_FACTOR 2
+03_GTAG_PROJ_REBIN_FACTOR 2
+04_GTAG_PROJ_REBIN_FACTOR 2
+05_GTAG_PROJ_REBIN_FACTOR 2
+#
+# Reweight number of events in experiment tree by this amount if needed.
+# Useful in case of a need for livetime (re-)normalization (Say the weights in the original MC
+# tree is normalized for X years of livetime but we want to fix it to Y years, then Y/X)
+01_REWEIGHT_FACTOR 1.0
+02_REWEIGHT_FACTOR 1.0
+03_REWEIGHT_FACTOR 1.0
+04_REWEIGHT_FACTOR 1.0
+05_REWEIGHT_FACTOR 1.0
+#
+# Data files for experiments: Only used if not generating random data, but fitting to real data
+01_DATA_FILE X
+02_DATA_FILE X
+03_DATA_FILE X
+04_DATA_FILE X
+05_DATA_FILE X
+#
+# Names of data trees in the data files: Only used if fitting to real data (as above)
+01_DATA_TREE fitTree
+02_DATA_TREE fitTree
+03_DATA_TREE fitTree
+04_DATA_TREE fitTree
+05_DATA_TREE fitTree
+#
+#######
+# INTERACTION SECTION
+#######
+#
+# Number of interaction groups (each will have a PDF for each experiment, based on MC trees)
+# Always define it first
+N_INT 4
+#
+# Names of interactions to be used in histogram axis, names etc.
+01_INT_NAME nueO
+02_INT_NAME IBD+nuebarO
+03_INT_NAME non-nueCC
+04_INT_NAME nueCC>125MeV
+#
+# Colors of interactions to be used in graphs
+01_INT_COLOR 4
+02_INT_COLOR 2
+03_INT_COLOR 1
+04_INT_COLOR 30
+#
+# Fraction of real expected events to be simulated, default should always be 1.0
+# Useful to study what happens if a background reduces to half, or signal is lower etc.
+01_INT_VAR_FRAC 1.0
+02_INT_VAR_FRAC 1.0
+03_INT_VAR_FRAC 1.0
+04_INT_VAR_FRAC 1.0
+#
+# Initial values (ratio of measured to expected events) used in the fitting:
+01_INT_INIT_VAL 1.0
+02_INT_INIT_VAL 1.0
+03_INT_INIT_VAL 1.0
+04_INT_INIT_VAL 1.0
+#
+# Gaussian sigma with alternative initial values will be selected from
+01_INT_INIT_SIGMA 0.25
+02_INT_INIT_SIGMA 0.25
+03_INT_INIT_SIGMA 0.25
+04_INT_INIT_SIGMA 0.25
+#
+# Whether the interaction is free (0) or fixed at initial value (1)
+01_INT_IS_FIXED 0
+02_INT_IS_FIXED 0
+03_INT_IS_FIXED 0
+04_INT_IS_FIXED 0
+#
+# Visible energy subbins per interaction for each a gamma tagging PDF will be prepared
+# For example if evis 30-200 MeV is fit, 17 means for every 170/17=10 MeV (20-30 MeV, 30-40
+# MeV etc.) a different gamma tagging PDF will be used
+01_EVIS_SUBBINS_FOR_GTAG 17
+02_EVIS_SUBBINS_FOR_GTAG 17
+03_EVIS_SUBBINS_FOR_GTAG 17
+04_EVIS_SUBBINS_FOR_GTAG 17
+#
+## Below are lower and upper cuts to apply to MC tree to get events of a particular interaction
+## Lower cuts are inclusive and upper cuts are exclusive
+#
+# Lower interaction name cut
+01_INT_NAME_CUT_LOW 0
+02_INT_NAME_CUT_LOW 1
+03_INT_NAME_CUT_LOW 3
+04_INT_NAME_CUT_LOW 7
+#
+# Upper interaction name cut
+01_INT_NAME_CUT_UP 1
+02_INT_NAME_CUT_UP 3
+03_INT_NAME_CUT_UP 7
+04_INT_NAME_CUT_UP 10
+#
+# Lower true decay-e cut
+01_NMUE_CUT_LOW 0
+02_NMUE_CUT_LOW 0
+03_NMUE_CUT_LOW 0
+04_NMUE_CUT_LOW 0
+#
+# Upper true decay-e cut (10 is to include all)
+01_NMUE_CUT_UP 10
+02_NMUE_CUT_UP 10
+03_NMUE_CUT_UP 10
+04_NMUE_CUT_UP 10
+#
+# Lower neutrino energy cut (MeV)
+01_NU_ENE_CUT_LOW 0.0
+02_NU_ENE_CUT_LOW 0.0
+03_NU_ENE_CUT_LOW 0.0
+04_NU_ENE_CUT_LOW 125.0
+#
+# Upper neutrino energy cut (MeV)
+01_NU_ENE_CUT_UP 125.0
+02_NU_ENE_CUT_UP 125.0
+03_NU_ENE_CUT_UP 10000000000.0
+04_NU_ENE_CUT_UP 10000000000.0
+#
+# Lower distance to wall cut (cm) (Always make it same for all interactions)
+01_WALL_CUT_LOW 100.0
+02_WALL_CUT_LOW 100.0
+03_WALL_CUT_LOW 100.0
+04_WALL_CUT_LOW 100.0
+#
+# Upper distance to wall cut (cm) (Always make it same for all interactions)
+# Max value possible is 1690 cm so anything above should be equivalent to having no max cut
+01_WALL_CUT_UP 20000.0
+02_WALL_CUT_UP 20000.0
+03_WALL_CUT_UP 20000.0
+04_WALL_CUT_UP 20000.0
+#
+# Interaction step size ratio to the initial value used in the fitting
+01_INT_STEP_SIZE_RATIO 0.01
+02_INT_STEP_SIZE_RATIO 0.01
+03_INT_STEP_SIZE_RATIO 0.01
+04_INT_STEP_SIZE_RATIO 0.01
+#
+# Visible energy KDE option string
+01_EVIS_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:unbinned
+02_EVIS_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:unbinned
+03_EVIS_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:unbinned
+04_EVIS_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:unbinned
+#01_EVIS_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:relaxedbinning
+#02_EVIS_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:relaxedbinning
+#03_EVIS_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:relaxedbinning
+#04_EVIS_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:relaxedbinning
+#
+# Visible Energy KDE rho parameter
+01_EVIS_KDE_RHO 1.0
+02_EVIS_KDE_RHO 1.0
+03_EVIS_KDE_RHO 0.5
+04_EVIS_KDE_RHO 1.5
+#
+# If events in evis KDE is lower than this value, use alternative distribution
+01_EVIS_KDE_LOW 100
+02_EVIS_KDE_LOW 100
+03_EVIS_KDE_LOW 100
+04_EVIS_KDE_LOW 100
+#
+# Gamma tag KDE option string
+01_GTAG_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:unbinned
+02_GTAG_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:unbinned
+03_GTAG_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:unbinned
+04_GTAG_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:unbinned
+#
+# Gamma tag KDE rho parameter
+01_GTAG_KDE_RHO 1.0
+02_GTAG_KDE_RHO 1.0
+03_GTAG_KDE_RHO 1.0
+04_GTAG_KDE_RHO 1.0
+#
+# If events in evis KDE is lower than this value, use alternative distribution
+01_GTAG_KDE_LOW 20
+02_GTAG_KDE_LOW 20
+03_GTAG_KDE_LOW 20
+04_GTAG_KDE_LOW 20
+#
+# Whether to scan around the best fit point for interaction fraction parameters (1 is yes)
+01_INT_SCAN 1
+02_INT_SCAN 1
+03_INT_SCAN 1
+04_INT_SCAN 1
+#
+#######
+# SYSTEMATICS SECTION
+#######
+#
+# Number of systematics to be included, always define it before other sys parameters
+N_SYS 0
+#
+# Minimum allowed systematic weight for combination of all scale systematics
+SYS_WEIGHT_MIN_SCALE 0.00001
+#
+# Maximum allowed systematic weight for combination of all scale systematics
+SYS_WEIGHT_MAX_SCALE 5.0
+#
+# Minimum allowed systematic weight for combination of all shift systematics
+SYS_WEIGHT_MIN_SHIFT 0.5
+#
+# Maximum allowed systematic weight for combination of all shift systematics
+SYS_WEIGHT_MAX_SHIFT 1.5
+#
+# Lower limit in terms of sigma during fitting for all systematic
+# Prevents trial of extreme values (sometimes even NaNs)
+SYS_LOW_LIMIT -10.0
+#
+# Upper limit in terms of sigma during fitting for all systematic
+# Prevents trial of extreme values (sometimes even NaNs)
+SYS_UP_LIMIT 10.0
+#
+# Name of systematic
+#01_SYS_NAME escale_SK1
+#
+# Shift (0) (By shifting MC entries left or right - like escale) or Scale (1) (By giving different
+# weights to MC entries) is better representation of this systematic
+# Energy scale and gamma tag scale should be shift, everything else is typically scale
+#01_SHIFT_OR_SCALE 0
+#
+# Tree branch name (in MC tree) of the 1 sigma systematic weight 
+# (required if scale systematic, if shift then put an x as convention)
+#01_WEIGHT_NAME X
+#
+# Whether the systematic affects neutron pdf
+# 0: no, 1: yes
+#01_EFF_NEUTRON 0
+#
+# Whether the systematic affects gamma pdf
+# 0: no, 1: yes
+#01_EFF_GAMMA 0
+#
+# Whether the systematic affects energy pdf
+# 0: no, 1: yes
+#01_EFF_ENERGY 1
+#
+# Whether the systematic affects expected number of events
+# Important: Only if the systeamtic is a detector systematic this should be set to 1
+# This is because we are measuring ratio to number of expected events for our flux/xscn model
+# so we do not want to changed number of expected events due to flux/systematic errors
+# 0: no, 1: yes
+#01_EFF_NEVENTS 1
+#
+# Which input experiments (sk versions etc) it affects
+# 0: no, 1: yes
+# Enter as many columns as N_EXP separated by space, and in order (1st entry is 1st exp etc.)
+# Typically detector systematics are affecting 1 experiment only, but interaction/flux sys
+# should affect all experiments
+#01_EFF_EXP 1 0 0 0 0
+#
+# Which input interactions (nueO, IBD etc) it affects
+# 0: no, 1: yes
+# Enter as many columns as N_INT separated by space, and in order (1st entry is 1st int etc.)
+# Typically detector systematics are affecting all interactions but interaction sys
+# should affect a single interaction. Flux can be both (whether it is nue flux, or all neutrino
+# flux etc)
+#01_EFF_INT 1 1 1 1 
+#
+# Whether to fix the systematic in its initial value during fitting: Use this if you may want
+# to fix just a few of the systematics, if all is required to be fixed then can use
+# FIX_SYSTEMATICS option above
+#01_IS_FIXED 0
+#
+# 1-Sigma of The Systematic: 
+# For systematics that have 1 sigma weights in MC trees, just enter 1
+# For other systematics (energy scale etc.) just enter % variation at 1 sigma
+#01_SYS_SIGMA 3.3 
+#
+# Default is 1.0. If sigma>0.0 correction factor to weights of this systematic
+# Used to balance large assymetries in +-1 sigma shifts of systematics
+# These may arise due to an unwanted consequence of normalization of PDFs after weighting
+#01_SYS_POS_CORR 1.0
+#
+# Default is 1.0. If sigma<=0.0 correction factor to weights of this systematic
+#01_SYS_NEG_CORR 1.0
+#
+# Initial value of systematic for the fit 
+# Initial value of systematic for the fit 
+#01_SYS_INIT_VAL 0
+#
+# Gaussian sigma for randomly determinining alternative starting values for a fit 
+#01_SYS_INIT_SIGMA 0.25
+#
+# Generating value of the systematic (When generating toy data these values will be used unless
+# sys values are also randomized)
+#01_SYS_GEN_VAL 0
+#
+# Systematic step size ratio to their sigma used in initializing fitter step size and calculating 
+# numerical derivatives: 1/100th should be small enough
+#01_SYS_STEP_SIZE_RATIO 0.01
+#
+# Whether to scan around best fit point for each parameter
+#01_SYS_SCAN 1

@@ -1,0 +1,1940 @@
+#### EXAMPLE CARD FILE FOR NU_E - 16O FITTER WITH SYSTEMATICS
+#
+#######
+# INITIAL SECTION
+#######
+#
+# Name of the card file
+CARD_NAME cardAtmpdSysTest.card
+#
+# Will random data be generated?: 
+# If 0 (false) generate random data within the fitter to study fit performance
+# If 1 (true) get data to fit from: dataFiles and dataTrees
+GEN_RAND_DATA 1
+#
+# Will generated data have Poission fluctuations? 0: no, 1: yes
+N_EVENTS_POISSON 1
+#
+# When generating random data, will generating value of systematics be used (0) or systematics
+# will be randomly determined (1) according to a Gaussion dist (given sigma, mean at gen value)
+RAND_SYSTEMATICS 1
+#
+# When fitting will systematics be free (0) or fixed by the fitter to their true values (1)
+FIX_SYSTEMATICS 0
+#
+# Random number seed for ROOT TRandom3 generator
+#RAND_SEED 783729342
+RAND_SEED 0
+#	
+# How many initial points each fit will start and minimize from
+# At the end the result with minimum NLL wil be selected as usual
+# This is to circumvent issues with being stuck in a local minima
+# If set to 1 only 1 fit will be performed starting from the prescribed initial values
+N_SUBFIT 5
+#
+# Number of random datasets to be generated and fits to be performed to them
+N_FIT 1
+#
+# Number of fits for which graphs (stacked histograms etc.) to be saved
+N_GRAPH 1
+#
+# Number of fits for which profile likelihood method will be applied
+N_PROFILE 0
+#
+# Which fit parameter to do the profile fit for
+PROF_INDEX 0
+# Start of profile steps
+PROF_START 0.0
+# End of profile steps
+PROF_END 2.0
+# Profile step size
+PROF_STEP 0.05
+#
+#######
+# EXPERIMENT SECTION
+#######
+#
+# Number of different experiments (SK1, SK2, ...etc.) to be used
+# Always define it first
+N_EXP 5
+#
+# Names of experiments
+01_EXP_NAME SK1
+02_EXP_NAME SK2
+03_EXP_NAME SK3
+04_EXP_NAME SK4
+05_EXP_NAME SK5
+#	
+# Root filenames for experiment MC trees
+01_EXP_FILE /disk1/disk02/usr6/bbodur/nueoxygenAnalysis/unbinnedLhWithSys/inputs/sk1_sysWeightSampleTest.root
+02_EXP_FILE /disk1/disk02/usr6/bbodur/nueoxygenAnalysis/unbinnedLhWithSys/inputs/sk2_sysWeightSampleTest.root
+03_EXP_FILE /disk1/disk02/usr6/bbodur/nueoxygenAnalysis/unbinnedLhWithSys/inputs/sk3_sysWeightSampleTest.root
+04_EXP_FILE /disk1/disk02/usr6/bbodur/nueoxygenAnalysis/unbinnedLhWithSys/inputs/sk4_sysWeightSampleTest.root
+05_EXP_FILE /disk1/disk02/usr6/bbodur/nueoxygenAnalysis/unbinnedLhWithSys/inputs/sk5_sysWeightSampleTest.root
+#
+# Tree names within the root files
+01_EXP_TREE fitTree
+02_EXP_TREE fitTree
+03_EXP_TREE fitTree
+04_EXP_TREE fitTree
+05_EXP_TREE fitTree
+#
+# Whether to use neutron info for a given experiment: 0=No, 1=Yes
+01_NEUTRON_INFO 0
+02_NEUTRON_INFO 0
+03_NEUTRON_INFO 0
+04_NEUTRON_INFO 1
+05_NEUTRON_INFO 1
+#
+# Whether to use gamma info for a given experiment: 0=No, 1=Yes
+01_GAMMA_INFO 1
+02_GAMMA_INFO 1
+03_GAMMA_INFO 1
+04_GAMMA_INFO 1
+05_GAMMA_INFO 1
+#
+# Whether to use direction info for a given experiment: 0=No, 1=Yes 
+# Not supported for this version of the fitter (Choose 0), tested using direction info before
+# It does not improve the fit significantly (Estimated error goes from 41% o 40.5% etc.)
+# But adds much complexity, especially with systematics related to directionaility etc...
+01_DIR_INFO 0
+02_DIR_INFO 0
+03_DIR_INFO 0
+04_DIR_INFO 0
+05_DIR_INFO 0
+#	
+# Lower edge of visible	energy considered in fittingi (MeV)
+01_EVIS_LOW 30.0
+02_EVIS_LOW 30.0
+03_EVIS_LOW 30.0
+04_EVIS_LOW 30.0
+05_EVIS_LOW 30.0
+#
+# Upper edge of visible	energy considered in fitting (MeV)
+01_EVIS_UP 200.0
+02_EVIS_UP 200.0
+03_EVIS_UP 200.0
+04_EVIS_UP 200.0
+05_EVIS_UP 200.0
+#	
+# Lower edge of visible	energy considered in preparing PDFs with KDEs
+# Should be more inclusive than edges used in PDFs: If PDF edge is at 30 MeV, in a KDE an event at
+# 29 MeV may contribute to shape of PDF around 30 MeV
+01_EVIS_LOW_BUF 20.0
+02_EVIS_LOW_BUF 20.0
+03_EVIS_LOW_BUF 20.0
+04_EVIS_LOW_BUF 20.0
+05_EVIS_LOW_BUF 20.0
+#	
+# Upper edge of visible	energy considered in preparing PDFs with KDEs
+# Same idea as lower buffer edge
+01_EVIS_UP_BUF 225.0
+02_EVIS_UP_BUF 225.0
+03_EVIS_UP_BUF 225.0
+04_EVIS_UP_BUF 225.0
+05_EVIS_UP_BUF 225.0
+#
+# Number of bins in normalization histograms: If PDFs need to be normalized (numerically)
+# they will be cast into histograms and scaled
+01_EVIS_BINS_NORM 170
+02_EVIS_BINS_NORM 170
+03_EVIS_BINS_NORM 170
+04_EVIS_BINS_NORM 170
+05_EVIS_BINS_NORM 170
+#
+# Number of bins in projection histograms (For making stacked plots etc). Since mock (or real)
+# data may have low statistics, better to have larger bin size than norm histograms (5-10 MeV)
+# Correction: This si the rebin factor: number of bins in prj hist = bins in norm hist/rebin factor
+01_EVIS_PROJ_REBIN_FACTOR 5
+02_EVIS_PROJ_REBIN_FACTOR 5
+03_EVIS_PROJ_REBIN_FACTOR 5
+04_EVIS_PROJ_REBIN_FACTOR 5
+05_EVIS_PROJ_REBIN_FACTOR 5
+#
+# Lower edge of gamma tag considered in fitting (dimless)
+01_GTAG_LOW -2.0
+02_GTAG_LOW -2.0
+03_GTAG_LOW -2.0
+04_GTAG_LOW -2.0
+05_GTAG_LOW -2.0
+#
+# Upper edge of gamma tag considered in fitting (dimless)
+01_GTAG_UP 2.0
+02_GTAG_UP 2.0
+03_GTAG_UP 2.0
+04_GTAG_UP 2.0
+05_GTAG_UP 2.0
+#	
+# Lower edge of gamma tag considered in preparing PDFs with KDEs
+# Should be more inclusive than edges used in PDFs: If PDF edge is at 2, in a KDE an event at
+# 2.05 can contribute to value at 2
+01_GTAG_LOW_BUF -2.1
+02_GTAG_LOW_BUF -2.1
+03_GTAG_LOW_BUF -2.1
+04_GTAG_LOW_BUF -2.1
+05_GTAG_LOW_BUF -2.1
+#	
+# Upper edge of gamma tag considered in preparing PDFs with KDEs
+# Same idea as lower buffer edge
+01_GTAG_UP_BUF 2.1
+02_GTAG_UP_BUF 2.1
+03_GTAG_UP_BUF 2.1
+04_GTAG_UP_BUF 2.1
+05_GTAG_UP_BUF 2.1
+#
+# Number of bins in normalization histograms: If PDFs need to be normalized (numerically)
+# they will be cast into histograms and scaled
+01_GTAG_BINS_NORM 80
+02_GTAG_BINS_NORM 80
+03_GTAG_BINS_NORM 80
+04_GTAG_BINS_NORM 80
+05_GTAG_BINS_NORM 80
+#
+# Number of bins in projection histograms (For making stacked plots etc). Since mock (or real)
+# data may have low statistics, better to have larger bin size than norm histograms (0.1 gtag)
+# Correction: This si the rebin factor: number of bins in prj hist = bins in norm hist/rebin factor
+01_GTAG_PROJ_REBIN_FACTOR 2
+02_GTAG_PROJ_REBIN_FACTOR 2
+03_GTAG_PROJ_REBIN_FACTOR 2
+04_GTAG_PROJ_REBIN_FACTOR 2
+05_GTAG_PROJ_REBIN_FACTOR 2
+#
+# Reweight number of events in experiment tree by this amount if needed.
+# Useful in case of a need for livetime (re-)normalization (Say the weights in the original MC
+# tree is normalized for X years of livetime but we want to fix it to Y years, then Y/X)
+01_REWEIGHT_FACTOR 1.0
+02_REWEIGHT_FACTOR 1.0
+03_REWEIGHT_FACTOR 1.0
+04_REWEIGHT_FACTOR 1.0
+05_REWEIGHT_FACTOR 1.0
+#
+# Data files for experiments: Only used if not generating random data, but fitting to real data
+01_DATA_FILE X
+02_DATA_FILE X
+03_DATA_FILE X
+04_DATA_FILE X
+05_DATA_FILE X
+#
+# Names of data trees in the data files: Only used if fitting to real data (as above)
+01_DATA_TREE X
+02_DATA_TREE X
+03_DATA_TREE X
+04_DATA_TREE X
+05_DATA_TREE X
+#
+#######
+# INTERACTION SECTION
+#######
+#
+# Number of interaction groups (each will have a PDF for each experiment, based on MC trees)
+# Always define it first
+N_INT 4
+#
+# Names of interactions to be used in histogram axis, names etc.
+01_INT_NAME nueO
+02_INT_NAME IBD+nuebarO
+03_INT_NAME non-nueCC
+04_INT_NAME nueCC>125MeV
+#
+# Colors of interactions to be used in graphs
+01_INT_COLOR 4
+02_INT_COLOR 2
+03_INT_COLOR 1
+04_INT_COLOR 30
+#
+# Fraction of real expected events to be simulated, default should always be 1.0
+# Useful to study what happens if a background reduces to half, or signal is lower etc.
+01_INT_VAR_FRAC 1.0
+02_INT_VAR_FRAC 1.0
+03_INT_VAR_FRAC 1.0
+04_INT_VAR_FRAC 1.0
+#
+# Initial values (ratio of measured to expected events) used in the fitting:
+01_INT_INIT_VAL 1.0
+02_INT_INIT_VAL 1.0
+03_INT_INIT_VAL 1.0
+04_INT_INIT_VAL 1.0
+#
+# Gaussian sigma with alternative initial values will be selected from
+01_INT_INIT_SIGMA 0.25
+02_INT_INIT_SIGMA 0.25
+03_INT_INIT_SIGMA 0.25
+04_INT_INIT_SIGMA 0.25
+#
+#
+# Visible energy subbins per interaction for each a gamma tagging PDF will be prepared
+# For example if evis 30-200 MeV is fit, 17 means for every 170/17=10 MeV (20-30 MeV, 30-40
+# MeV etc.) a different gamma tagging PDF will be used
+01_EVIS_SUBBINS_FOR_GTAG 17
+02_EVIS_SUBBINS_FOR_GTAG 17
+03_EVIS_SUBBINS_FOR_GTAG 17
+04_EVIS_SUBBINS_FOR_GTAG 17
+#
+## Below are lower and upper cuts to apply to MC tree to get events of a particular interaction
+## Lower cuts are inclusive and upper cuts are exclusive
+#
+# Lower interaction name cut
+01_INT_NAME_CUT_LOW 0
+02_INT_NAME_CUT_LOW 1
+03_INT_NAME_CUT_LOW 3
+04_INT_NAME_CUT_LOW 7
+#
+# Upper interaction name cut
+01_INT_NAME_CUT_UP 1
+02_INT_NAME_CUT_UP 3
+03_INT_NAME_CUT_UP 7
+04_INT_NAME_CUT_UP 10
+#
+# Lower true decay-e cut
+01_NMUE_CUT_LOW 0
+02_NMUE_CUT_LOW 0
+03_NMUE_CUT_LOW 0
+04_NMUE_CUT_LOW 0
+#
+# Upper true decay-e cut (10 is to include all)
+01_NMUE_CUT_UP 10
+02_NMUE_CUT_UP 10
+03_NMUE_CUT_UP 10
+04_NMUE_CUT_UP 10
+#
+# Lower neutrino energy cut (MeV)
+01_NU_ENE_CUT_LOW 0.0
+02_NU_ENE_CUT_LOW 0.0
+03_NU_ENE_CUT_LOW 0.0
+04_NU_ENE_CUT_LOW 125.0
+#
+# Upper neutrino energy cut (MeV)
+01_NU_ENE_CUT_UP 125.0
+02_NU_ENE_CUT_UP 125.0
+03_NU_ENE_CUT_UP 10000000000.0
+04_NU_ENE_CUT_UP 10000000000.0
+#
+# Lower distance to wall cut (cm) (Always make it same for all interactions)
+01_WALL_CUT_LOW 100.0
+02_WALL_CUT_LOW 100.0
+03_WALL_CUT_LOW 100.0
+04_WALL_CUT_LOW 100.0
+#
+# Upper distance to wall cut (cm) (Always make it same for all interactions)
+# Max value possible is 1690 cm so anything above should be equivalent to having no max cut
+01_WALL_CUT_UP 20000.0
+02_WALL_CUT_UP 20000.0
+03_WALL_CUT_UP 20000.0
+04_WALL_CUT_UP 20000.0
+#
+# Interaction step size ratio to the initial value used in the fitting
+01_INT_STEP_SIZE_RATIO 0.01
+02_INT_STEP_SIZE_RATIO 0.01
+03_INT_STEP_SIZE_RATIO 0.01
+04_INT_STEP_SIZE_RATIO 0.01
+#
+# Visible energy KDE option string
+01_EVIS_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:unbinned
+02_EVIS_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:unbinned
+03_EVIS_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:unbinned
+04_EVIS_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:unbinned
+#01_EVIS_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:relaxedbinning
+#02_EVIS_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:relaxedbinning
+#03_EVIS_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:relaxedbinning
+#04_EVIS_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:relaxedbinning
+#
+# Visible Energy KDE rho parameter
+01_EVIS_KDE_RHO 1.0
+02_EVIS_KDE_RHO 1.0
+03_EVIS_KDE_RHO 0.5
+04_EVIS_KDE_RHO 1.5
+#
+# If events in evis KDE is lower than this value, use alternative distribution
+01_EVIS_KDE_LOW 100
+02_EVIS_KDE_LOW 100
+03_EVIS_KDE_LOW 100
+04_EVIS_KDE_LOW 100
+#
+# Gamma tag KDE option string
+01_GTAG_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:unbinned
+02_GTAG_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:unbinned
+03_GTAG_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:unbinned
+04_GTAG_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:unbinned
+#01_GTAG_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:relaxedbinning
+#02_GTAG_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:relaxedbinning
+#03_GTAG_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:relaxedbinning
+#04_GTAG_KDE_OPT_STR KernelType:Gaussian;Iteration:Fixed;Mirror:noMirror;Binning:relaxedbinning
+#
+# Gamma tag KDE rho parameter
+01_GTAG_KDE_RHO 1.0
+02_GTAG_KDE_RHO 1.0
+03_GTAG_KDE_RHO 1.0
+04_GTAG_KDE_RHO 1.0
+#
+# If events in evis KDE is lower than this value, use alternative distribution
+01_GTAG_KDE_LOW 20
+02_GTAG_KDE_LOW 20
+03_GTAG_KDE_LOW 20
+04_GTAG_KDE_LOW 20
+#
+#######
+# SYSTEMATICS SECTION
+#######
+#
+# Number of systematics to be included, always define it before other sys parameters
+N_SYS 99
+#
+# Minimum allowed systematic weight for combination of all scale systematics
+SYS_WEIGHT_MIN_SCALE 0.00001
+#
+# Maximum allowed systematic weight for combination of all scale systematics
+SYS_WEIGHT_MAX_SCALE 5.0
+#
+# Minimum allowed systematic weight for combination of all shift systematics
+SYS_WEIGHT_MIN_SHIFT 0.5
+#
+# Maximum allowed systematic weight for combination of all shift systematics
+SYS_WEIGHT_MAX_SHIFT 1.5
+#
+# Lower limit in terms of sigma during fitting for all systematic
+# Prevents trial of extreme values (sometimes even NaNs)
+SYS_LOW_LIMIT -10.0
+#
+# Upper limit in terms of sigma during fitting for all systematic
+# Prevents trial of extreme values (sometimes even NaNs)
+SYS_UP_LIMIT 10.0
+#
+# Name of systematic
+01_SYS_NAME escale_SK1
+02_SYS_NAME escale_SK2
+03_SYS_NAME escale_SK3
+04_SYS_NAME escale_SK4
+05_SYS_NAME escale_SK5
+06_SYS_NAME gscale_SK1
+07_SYS_NAME gscale_SK2
+08_SYS_NAME gscale_SK3
+09_SYS_NAME gscale_SK4
+10_SYS_NAME gscale_SK5
+11_SYS_NAME gammaShape_nueO
+12_SYS_NAME gammaShape_nuebarO
+13_SYS_NAME ntagEff
+14_SYS_NAME neutronShape_nueO
+15_SYS_NAME neutronShape_nuebarO
+16_SYS_NAME xscnShape_nueO
+17_SYS_NAME xscnShape_nuebarO
+18_SYS_NAME fraction_nuebarO
+19_SYS_NAME abs_norm_E_lt_1GeV 
+20_SYS_NAME nu_nubar_ratio_E_lt_1GeV
+21_SYS_NAME nu_nubar_ratio_E_gt_10GeV
+22_SYS_NAME nuebar_nue_E_lt_1GeV
+23_SYS_NAME nuebar_nue_E_gt_10GeV
+24_SYS_NAME numubar_numu_E_lt_1GeV
+25_SYS_NAME numubar_numu_E_gt_10GeV
+26_SYS_NAME up_down_ratio
+27_SYS_NAME horizontal_vertical_ratio
+28_SYS_NAME K_pi_ratio
+29_SYS_NAME nu_path
+30_SYS_NAME abs_norm_E_gt_1GeV
+31_SYS_NAME relative_norm_FC_multi_GeV
+32_SYS_NAME relative_norm_PC_UpStop
+33_SYS_NAME CCQE_xsec_shape
+34_SYS_NAME DIS_model_difference
+35_SYS_NAME DIS_xsec
+36_SYS_NAME coherent_pi_xsec
+37_SYS_NAME NC_CC_ratio
+38_SYS_NAME CC_nutau_xsec
+39_SYS_NAME FC_reduction
+40_SYS_NAME PC_reduction
+41_SYS_NAME UpMu_reduction
+42_SYS_NAME FC_PC_separation
+43_SYS_NAME hadron_simulation
+44_SYS_NAME non_nue_bg_elike
+45_SYS_NAME non_nu_bg_mulike
+46_SYS_NAME up_stop_thru_separation
+47_SYS_NAME ring_separation
+48_SYS_NAME pid_1ring
+49_SYS_NAME pid_multi_ring
+50_SYS_NAME energy_calibration 
+51_SYS_NAME upstop_energy_cut
+52_SYS_NAME up_down_energy_calibration
+53_SYS_NAME nonshowering_bg_sub
+54_SYS_NAME upstop_bg_sub
+55_SYS_NAME non_nue_bg_mg_1ring_elike
+56_SYS_NAME non_nue_bg_mg_multiring_elike
+57_SYS_NAME PC_stop_through_separation_top
+58_SYS_NAME solar_activity
+59_SYS_NAME showering_bg_sub
+60_SYS_NAME shower_nonshower_separation
+61_SYS_NAME two_ring_pi0
+62_SYS_NAME decay_e_tagging
+63_SYS_NAME CCQE_nu_nubar_ratio
+64_SYS_NAME CCQE_numu_nue_ratio
+65_SYS_NAME pi0_qpi_ratio
+66_SYS_NAME nubar_nu_1pi_ratio
+67_SYS_NAME nu_nubar_ratio_1_E_10GeV
+68_SYS_NAME nuebar_nue_1_E_10GeV
+69_SYS_NAME numubar_numu_1_E_10GeV
+70_SYS_NAME pi_decay_tagging_error
+71_SYS_NAME fiducial_volume
+72_SYS_NAME PC_stop_through_separation_bar
+73_SYS_NAME PC_stop_through_separation_bot
+74_SYS_NAME dis_q2_high_W
+75_SYS_NAME dis_q2_low_W
+76_SYS_NAME theta13_error
+77_SYS_NAME solDm2_error
+78_SYS_NAME theta12_error
+79_SYS_NAME t2k_m23_error
+80_SYS_NAME t2k_s23_error
+81_SYS_NAME matter_effect_error
+82_SYS_NAME neut_axial_mass
+83_SYS_NAME gs_1pi_axial_coupling
+84_SYS_NAME gs_1pi_CA5
+85_SYS_NAME gs_1pi_bkg
+86_SYS_NAME mec_on_off
+87_SYS_NAME dis_had_mult
+88_SYS_NAME neutron_tag
+89_SYS_NAME neutron_mult
+90_SYS_NAME neutron_multiplicity_generator_comp
+91_SYS_NAME mrbdt
+92_SYS_NAME migration_mrbdt
+93_SYS_NAME dis_q2_vec_low_W
+94_SYS_NAME dis_q2_axi_low_W
+95_SYS_NAME dis_norm_low_W
+96_SYS_NAME CCQE_xsec_norm_sub
+97_SYS_NAME CCQE_xsec_norm_mult
+98_SYS_NAME fsi_hadprod_up_set13
+99_SYS_NAME fsi_hadprod_down_set8
+#
+# Shift (0) (By shifting MC entries left or right - like escale) or Scale (1) (By giving different
+# weights to MC entries) is better representation of this systematic
+# Energy scale and gamma tag scale should be shift, everything else is typically scale
+01_SHIFT_OR_SCALE 0
+02_SHIFT_OR_SCALE 0
+03_SHIFT_OR_SCALE 0
+04_SHIFT_OR_SCALE 0
+05_SHIFT_OR_SCALE 0
+06_SHIFT_OR_SCALE 1
+07_SHIFT_OR_SCALE 1
+08_SHIFT_OR_SCALE 1
+09_SHIFT_OR_SCALE 1
+10_SHIFT_OR_SCALE 1
+11_SHIFT_OR_SCALE 1
+12_SHIFT_OR_SCALE 1
+13_SHIFT_OR_SCALE 1
+14_SHIFT_OR_SCALE 1
+15_SHIFT_OR_SCALE 1
+16_SHIFT_OR_SCALE 1
+17_SHIFT_OR_SCALE 1
+18_SHIFT_OR_SCALE 1
+19_SHIFT_OR_SCALE 1 
+20_SHIFT_OR_SCALE 1 
+21_SHIFT_OR_SCALE 1 
+22_SHIFT_OR_SCALE 1 
+23_SHIFT_OR_SCALE 1 
+24_SHIFT_OR_SCALE 1
+25_SHIFT_OR_SCALE 1
+26_SHIFT_OR_SCALE 1
+27_SHIFT_OR_SCALE 1
+28_SHIFT_OR_SCALE 1
+29_SHIFT_OR_SCALE 1
+30_SHIFT_OR_SCALE 1
+31_SHIFT_OR_SCALE 1
+32_SHIFT_OR_SCALE 1
+33_SHIFT_OR_SCALE 1
+34_SHIFT_OR_SCALE 1
+35_SHIFT_OR_SCALE 1
+36_SHIFT_OR_SCALE 1
+37_SHIFT_OR_SCALE 1
+38_SHIFT_OR_SCALE 1
+39_SHIFT_OR_SCALE 1
+40_SHIFT_OR_SCALE 1
+41_SHIFT_OR_SCALE 1
+42_SHIFT_OR_SCALE 1
+43_SHIFT_OR_SCALE 1
+44_SHIFT_OR_SCALE 1
+45_SHIFT_OR_SCALE 1
+46_SHIFT_OR_SCALE 1
+47_SHIFT_OR_SCALE 1
+48_SHIFT_OR_SCALE 1
+49_SHIFT_OR_SCALE 1
+50_SHIFT_OR_SCALE 1
+51_SHIFT_OR_SCALE 1
+52_SHIFT_OR_SCALE 1
+53_SHIFT_OR_SCALE 1
+54_SHIFT_OR_SCALE 1
+55_SHIFT_OR_SCALE 1
+56_SHIFT_OR_SCALE 1
+57_SHIFT_OR_SCALE 1
+58_SHIFT_OR_SCALE 1
+59_SHIFT_OR_SCALE 1
+60_SHIFT_OR_SCALE 1
+61_SHIFT_OR_SCALE 1
+62_SHIFT_OR_SCALE 1
+63_SHIFT_OR_SCALE 1
+64_SHIFT_OR_SCALE 1
+65_SHIFT_OR_SCALE 1
+66_SHIFT_OR_SCALE 1
+67_SHIFT_OR_SCALE 1
+68_SHIFT_OR_SCALE 1
+69_SHIFT_OR_SCALE 1
+70_SHIFT_OR_SCALE 1
+71_SHIFT_OR_SCALE 1
+72_SHIFT_OR_SCALE 1
+73_SHIFT_OR_SCALE 1
+74_SHIFT_OR_SCALE 1
+75_SHIFT_OR_SCALE 1
+76_SHIFT_OR_SCALE 1
+77_SHIFT_OR_SCALE 1
+78_SHIFT_OR_SCALE 1
+79_SHIFT_OR_SCALE 1
+80_SHIFT_OR_SCALE 1
+81_SHIFT_OR_SCALE 1
+82_SHIFT_OR_SCALE 1
+83_SHIFT_OR_SCALE 1
+84_SHIFT_OR_SCALE 1
+85_SHIFT_OR_SCALE 1
+86_SHIFT_OR_SCALE 1
+87_SHIFT_OR_SCALE 1
+88_SHIFT_OR_SCALE 1
+89_SHIFT_OR_SCALE 1
+90_SHIFT_OR_SCALE 1
+91_SHIFT_OR_SCALE 1
+92_SHIFT_OR_SCALE 1
+93_SHIFT_OR_SCALE 1
+94_SHIFT_OR_SCALE 1
+95_SHIFT_OR_SCALE 1
+96_SHIFT_OR_SCALE 1
+97_SHIFT_OR_SCALE 1
+98_SHIFT_OR_SCALE 1
+99_SHIFT_OR_SCALE 1
+#
+# Tree branch name (in MC tree) of the 1 sigma systematic weight 
+# (required if scale systematic, if shift then put an x as convention)
+01_WEIGHT_NAME X
+02_WEIGHT_NAME X
+03_WEIGHT_NAME X
+04_WEIGHT_NAME X
+05_WEIGHT_NAME X
+06_WEIGHT_NAME sysGammaTag
+07_WEIGHT_NAME sysGammaTag
+08_WEIGHT_NAME sysGammaTag
+09_WEIGHT_NAME sysGammaTag
+10_WEIGHT_NAME sysGammaTag
+11_WEIGHT_NAME sysNueoGamRatio540
+12_WEIGHT_NAME sysNuebaroGamRatio540
+13_WEIGHT_NAME sysNtagEff
+14_WEIGHT_NAME sysNueoNtrueRatio540
+15_WEIGHT_NAME sysNuebaroNtrueRatio540
+16_WEIGHT_NAME sysNueoXscnShape
+17_WEIGHT_NAME sysNuebaroXscnShape
+18_WEIGHT_NAME sysNuebaroIbdRatio
+19_WEIGHT_NAME abs_norm_E_lt_1GeV
+20_WEIGHT_NAME nu_nubar_ratio_E_lt_1GeV
+21_WEIGHT_NAME nu_nubar_ratio_E_gt_10GeV
+22_WEIGHT_NAME nuebar_nue_E_lt_1GeV
+23_WEIGHT_NAME nuebar_nue_E_gt_10GeV
+24_WEIGHT_NAME numubar_numu_E_lt_1GeV
+25_WEIGHT_NAME numubar_numu_E_gt_10GeV
+26_WEIGHT_NAME up_down_ratio
+27_WEIGHT_NAME horizontal_vertical_ratio
+28_WEIGHT_NAME K_pi_ratio
+29_WEIGHT_NAME nu_path
+30_WEIGHT_NAME abs_norm_E_gt_1GeV
+31_WEIGHT_NAME relative_norm_FC_multi_GeV
+32_WEIGHT_NAME relative_norm_PC_UpStop
+33_WEIGHT_NAME CCQE_xsec_shape
+34_WEIGHT_NAME DIS_model_difference
+35_WEIGHT_NAME DIS_xsec
+36_WEIGHT_NAME coherent_pi_xsec
+37_WEIGHT_NAME NC_CC_ratio
+38_WEIGHT_NAME CC_nutau_xsec
+39_WEIGHT_NAME FC_reduction
+40_WEIGHT_NAME PC_reduction
+41_WEIGHT_NAME UpMu_reduction
+42_WEIGHT_NAME FC_PC_separation
+43_WEIGHT_NAME hadron_simulation
+44_WEIGHT_NAME non_nue_bg_elike
+45_WEIGHT_NAME non_nu_bg_mulike
+46_WEIGHT_NAME up_stop_thru_separation
+47_WEIGHT_NAME ring_separation
+48_WEIGHT_NAME pid_1ring
+49_WEIGHT_NAME pid_multi_ring
+50_WEIGHT_NAME energy_calibration
+51_WEIGHT_NAME upstop_energy_cut
+52_WEIGHT_NAME up_down_energy_calibration
+53_WEIGHT_NAME nonshowering_bg_sub
+54_WEIGHT_NAME upstop_bg_sub
+55_WEIGHT_NAME non_nue_bg_mg_1ring_elike
+56_WEIGHT_NAME non_nue_bg_mg_multiring_elike
+57_WEIGHT_NAME PC_stop_through_separation_top
+58_WEIGHT_NAME solar_activity
+59_WEIGHT_NAME showering_bg_sub
+60_WEIGHT_NAME shower_nonshower_separation
+61_WEIGHT_NAME two_ring_pi0
+62_WEIGHT_NAME decay_e_tagging
+63_WEIGHT_NAME CCQE_nu_nubar_ratio
+64_WEIGHT_NAME CCQE_numu_nue_ratio
+65_WEIGHT_NAME pi0_qpi_ratio
+66_WEIGHT_NAME nubar_nu_1pi_ratio
+67_WEIGHT_NAME nu_nubar_ratio_1_E_10GeV
+68_WEIGHT_NAME nuebar_nue_1_E_10GeV
+69_WEIGHT_NAME numubar_numu_1_E_10GeV
+70_WEIGHT_NAME pi_decay_tagging_error
+71_WEIGHT_NAME fiducial_volume
+72_WEIGHT_NAME PC_stop_through_separation_bar
+73_WEIGHT_NAME PC_stop_through_separation_bot
+74_WEIGHT_NAME dis_q2_high_W
+75_WEIGHT_NAME dis_q2_low_W
+76_WEIGHT_NAME theta13_error
+77_WEIGHT_NAME solDm2_error
+78_WEIGHT_NAME theta12_error
+79_WEIGHT_NAME t2k_m23_error
+80_WEIGHT_NAME t2k_s23_error
+81_WEIGHT_NAME matter_effect_error
+82_WEIGHT_NAME neut_axial_mass
+83_WEIGHT_NAME gs_1pi_axial_coupling
+84_WEIGHT_NAME gs_1pi_CA5
+85_WEIGHT_NAME gs_1pi_bkg
+86_WEIGHT_NAME mec_on_off
+87_WEIGHT_NAME dis_had_mult
+88_WEIGHT_NAME neutron_tag
+89_WEIGHT_NAME neutron_mult
+90_WEIGHT_NAME neutron_multiplicity_generator_comp
+91_WEIGHT_NAME mrbdt
+92_WEIGHT_NAME migration_mrbdt
+93_WEIGHT_NAME dis_q2_vec_low_W
+94_WEIGHT_NAME dis_q2_axi_low_W
+95_WEIGHT_NAME dis_norm_low_W
+96_WEIGHT_NAME CCQE_xsec_norm_sub
+97_WEIGHT_NAME CCQE_xsec_norm_mult
+98_WEIGHT_NAME fsi_hadprod_up_set8
+99_WEIGHT_NAME fsi_hadprod_down_set13
+#
+# Whether the systematic affects neutron pdf
+# 0: no, 1: yes
+01_EFF_NEUTRON 0
+02_EFF_NEUTRON 0
+03_EFF_NEUTRON 0
+04_EFF_NEUTRON 0
+05_EFF_NEUTRON 0
+06_EFF_NEUTRON 0
+07_EFF_NEUTRON 0
+08_EFF_NEUTRON 0
+09_EFF_NEUTRON 0
+10_EFF_NEUTRON 0
+11_EFF_NEUTRON 0
+12_EFF_NEUTRON 0
+13_EFF_NEUTRON 1
+14_EFF_NEUTRON 1
+15_EFF_NEUTRON 1
+16_EFF_NEUTRON 0
+17_EFF_NEUTRON 0
+18_EFF_NEUTRON 1
+19_EFF_NEUTRON 1 
+20_EFF_NEUTRON 1 
+21_EFF_NEUTRON 1 
+22_EFF_NEUTRON 1 
+23_EFF_NEUTRON 1 
+24_EFF_NEUTRON 1
+25_EFF_NEUTRON 1
+26_EFF_NEUTRON 1
+27_EFF_NEUTRON 1
+28_EFF_NEUTRON 1
+29_EFF_NEUTRON 1
+30_EFF_NEUTRON 1
+31_EFF_NEUTRON 1
+32_EFF_NEUTRON 1
+33_EFF_NEUTRON 1
+34_EFF_NEUTRON 1
+35_EFF_NEUTRON 1
+36_EFF_NEUTRON 1
+37_EFF_NEUTRON 1
+38_EFF_NEUTRON 1
+39_EFF_NEUTRON 1
+40_EFF_NEUTRON 1
+41_EFF_NEUTRON 1
+42_EFF_NEUTRON 1
+43_EFF_NEUTRON 1
+44_EFF_NEUTRON 1
+45_EFF_NEUTRON 1
+46_EFF_NEUTRON 1
+47_EFF_NEUTRON 1
+48_EFF_NEUTRON 1
+49_EFF_NEUTRON 1
+50_EFF_NEUTRON 1
+51_EFF_NEUTRON 1
+52_EFF_NEUTRON 1
+53_EFF_NEUTRON 1
+54_EFF_NEUTRON 1
+55_EFF_NEUTRON 1
+56_EFF_NEUTRON 1
+57_EFF_NEUTRON 1
+58_EFF_NEUTRON 1
+59_EFF_NEUTRON 1
+60_EFF_NEUTRON 1
+61_EFF_NEUTRON 1
+62_EFF_NEUTRON 1
+63_EFF_NEUTRON 1
+64_EFF_NEUTRON 1
+65_EFF_NEUTRON 1
+66_EFF_NEUTRON 1
+67_EFF_NEUTRON 1
+68_EFF_NEUTRON 1
+69_EFF_NEUTRON 1
+70_EFF_NEUTRON 1
+71_EFF_NEUTRON 1
+72_EFF_NEUTRON 1
+73_EFF_NEUTRON 1
+74_EFF_NEUTRON 1
+75_EFF_NEUTRON 1
+76_EFF_NEUTRON 1
+77_EFF_NEUTRON 1
+78_EFF_NEUTRON 1
+79_EFF_NEUTRON 1
+80_EFF_NEUTRON 1
+81_EFF_NEUTRON 1
+82_EFF_NEUTRON 1
+83_EFF_NEUTRON 1
+84_EFF_NEUTRON 1
+85_EFF_NEUTRON 1
+86_EFF_NEUTRON 1
+87_EFF_NEUTRON 1
+88_EFF_NEUTRON 1
+89_EFF_NEUTRON 1
+90_EFF_NEUTRON 1
+91_EFF_NEUTRON 1
+92_EFF_NEUTRON 1
+93_EFF_NEUTRON 1
+94_EFF_NEUTRON 1
+95_EFF_NEUTRON 1
+96_EFF_NEUTRON 1
+97_EFF_NEUTRON 1
+98_EFF_NEUTRON 1
+99_EFF_NEUTRON 1
+#
+# Whether the systematic affects gamma pdf
+# 0: no, 1: yes
+01_EFF_GAMMA 0
+02_EFF_GAMMA 0
+03_EFF_GAMMA 0
+04_EFF_GAMMA 0
+05_EFF_GAMMA 0
+06_EFF_GAMMA 1
+07_EFF_GAMMA 1
+08_EFF_GAMMA 1
+09_EFF_GAMMA 1
+10_EFF_GAMMA 1
+11_EFF_GAMMA 1
+12_EFF_GAMMA 1
+13_EFF_GAMMA 0
+14_EFF_GAMMA 0
+15_EFF_GAMMA 0
+16_EFF_GAMMA 0
+17_EFF_GAMMA 0
+18_EFF_GAMMA 1
+19_EFF_GAMMA 1 
+20_EFF_GAMMA 1 
+21_EFF_GAMMA 1 
+22_EFF_GAMMA 1 
+23_EFF_GAMMA 1 
+24_EFF_GAMMA 1
+25_EFF_GAMMA 1
+26_EFF_GAMMA 1
+27_EFF_GAMMA 1
+28_EFF_GAMMA 1
+29_EFF_GAMMA 1
+30_EFF_GAMMA 1
+31_EFF_GAMMA 1
+32_EFF_GAMMA 1
+33_EFF_GAMMA 1
+34_EFF_GAMMA 1
+35_EFF_GAMMA 1
+36_EFF_GAMMA 1
+37_EFF_GAMMA 1
+38_EFF_GAMMA 1
+39_EFF_GAMMA 1
+40_EFF_GAMMA 1
+41_EFF_GAMMA 1
+42_EFF_GAMMA 1
+43_EFF_GAMMA 1
+44_EFF_GAMMA 1
+45_EFF_GAMMA 1
+46_EFF_GAMMA 1
+47_EFF_GAMMA 1
+48_EFF_GAMMA 1
+49_EFF_GAMMA 1
+50_EFF_GAMMA 1
+51_EFF_GAMMA 1
+52_EFF_GAMMA 1
+53_EFF_GAMMA 1
+54_EFF_GAMMA 1
+55_EFF_GAMMA 1
+56_EFF_GAMMA 1
+57_EFF_GAMMA 1
+58_EFF_GAMMA 1
+59_EFF_GAMMA 1
+60_EFF_GAMMA 1
+61_EFF_GAMMA 1
+62_EFF_GAMMA 1
+63_EFF_GAMMA 1
+64_EFF_GAMMA 1
+65_EFF_GAMMA 1
+66_EFF_GAMMA 1
+67_EFF_GAMMA 1
+68_EFF_GAMMA 1
+69_EFF_GAMMA 1
+70_EFF_GAMMA 1
+71_EFF_GAMMA 1
+72_EFF_GAMMA 1
+73_EFF_GAMMA 1
+74_EFF_GAMMA 1
+75_EFF_GAMMA 1
+76_EFF_GAMMA 1
+77_EFF_GAMMA 1
+78_EFF_GAMMA 1
+79_EFF_GAMMA 1
+80_EFF_GAMMA 1
+81_EFF_GAMMA 1
+82_EFF_GAMMA 1
+83_EFF_GAMMA 1
+84_EFF_GAMMA 1
+85_EFF_GAMMA 1
+86_EFF_GAMMA 1
+87_EFF_GAMMA 1
+88_EFF_GAMMA 1
+89_EFF_GAMMA 1
+90_EFF_GAMMA 1
+91_EFF_GAMMA 1
+92_EFF_GAMMA 1
+93_EFF_GAMMA 1
+94_EFF_GAMMA 1
+95_EFF_GAMMA 1
+96_EFF_GAMMA 1
+97_EFF_GAMMA 1
+98_EFF_GAMMA 1
+99_EFF_GAMMA 1
+#
+# Whether the systematic affects energy pdf
+# 0: no, 1: yes
+01_EFF_ENERGY 1
+02_EFF_ENERGY 1
+03_EFF_ENERGY 1
+04_EFF_ENERGY 1
+05_EFF_ENERGY 1
+06_EFF_ENERGY 0
+07_EFF_ENERGY 0
+08_EFF_ENERGY 0
+09_EFF_ENERGY 0
+10_EFF_ENERGY 0
+11_EFF_ENERGY 0
+12_EFF_ENERGY 0
+13_EFF_ENERGY 0
+14_EFF_ENERGY 0
+15_EFF_ENERGY 0
+16_EFF_ENERGY 1
+17_EFF_ENERGY 1
+18_EFF_ENERGY 1
+19_EFF_ENERGY 1 
+20_EFF_ENERGY 1 
+21_EFF_ENERGY 1 
+22_EFF_ENERGY 1 
+23_EFF_ENERGY 1 
+24_EFF_ENERGY 1
+25_EFF_ENERGY 1
+26_EFF_ENERGY 1
+27_EFF_ENERGY 1
+28_EFF_ENERGY 1
+29_EFF_ENERGY 1
+30_EFF_ENERGY 1
+31_EFF_ENERGY 1
+32_EFF_ENERGY 1
+33_EFF_ENERGY 1
+34_EFF_ENERGY 1
+35_EFF_ENERGY 1
+36_EFF_ENERGY 1
+37_EFF_ENERGY 1
+38_EFF_ENERGY 1
+39_EFF_ENERGY 1
+40_EFF_ENERGY 1
+41_EFF_ENERGY 1
+42_EFF_ENERGY 1
+43_EFF_ENERGY 1
+44_EFF_ENERGY 1
+45_EFF_ENERGY 1
+46_EFF_ENERGY 1
+47_EFF_ENERGY 1
+48_EFF_ENERGY 1
+49_EFF_ENERGY 1
+50_EFF_ENERGY 1
+51_EFF_ENERGY 1
+52_EFF_ENERGY 1
+53_EFF_ENERGY 1
+54_EFF_ENERGY 1
+55_EFF_ENERGY 1
+56_EFF_ENERGY 1
+57_EFF_ENERGY 1
+58_EFF_ENERGY 1
+59_EFF_ENERGY 1
+60_EFF_ENERGY 1
+61_EFF_ENERGY 1
+62_EFF_ENERGY 1
+63_EFF_ENERGY 1
+64_EFF_ENERGY 1
+65_EFF_ENERGY 1
+66_EFF_ENERGY 1
+67_EFF_ENERGY 1
+68_EFF_ENERGY 1
+69_EFF_ENERGY 1
+70_EFF_ENERGY 1
+71_EFF_ENERGY 1
+72_EFF_ENERGY 1
+73_EFF_ENERGY 1
+74_EFF_ENERGY 1
+75_EFF_ENERGY 1
+76_EFF_ENERGY 1
+77_EFF_ENERGY 1
+78_EFF_ENERGY 1
+79_EFF_ENERGY 1
+80_EFF_ENERGY 1
+81_EFF_ENERGY 1
+82_EFF_ENERGY 1
+83_EFF_ENERGY 1
+84_EFF_ENERGY 1
+85_EFF_ENERGY 1
+86_EFF_ENERGY 1
+87_EFF_ENERGY 1
+88_EFF_ENERGY 1
+89_EFF_ENERGY 1
+90_EFF_ENERGY 1
+91_EFF_ENERGY 1
+92_EFF_ENERGY 1
+93_EFF_ENERGY 1
+94_EFF_ENERGY 1
+95_EFF_ENERGY 1
+96_EFF_ENERGY 1
+97_EFF_ENERGY 1
+98_EFF_ENERGY 1
+99_EFF_ENERGY 1
+#
+# Whether the systematic affects expected number of events
+# Important: Only if the systeamtic is a detector systematic this should be set to 1
+# This is because we are measuring ratio to number of expected events for our flux/xscn model
+# so we do not want to changed number of expected events due to flux/systematic errors
+# 0: no, 1: yes
+01_EFF_NEVENTS 1
+02_EFF_NEVENTS 1
+03_EFF_NEVENTS 1
+04_EFF_NEVENTS 1
+05_EFF_NEVENTS 1
+06_EFF_NEVENTS 1
+07_EFF_NEVENTS 1
+08_EFF_NEVENTS 1
+09_EFF_NEVENTS 1
+10_EFF_NEVENTS 1
+11_EFF_NEVENTS 1
+12_EFF_NEVENTS 1
+13_EFF_NEVENTS 1
+14_EFF_NEVENTS 1
+15_EFF_NEVENTS 1
+16_EFF_NEVENTS 1
+17_EFF_NEVENTS 1
+18_EFF_NEVENTS 1
+19_EFF_NEVENTS 1 
+20_EFF_NEVENTS 1 
+21_EFF_NEVENTS 1 
+22_EFF_NEVENTS 1 
+23_EFF_NEVENTS 1 
+24_EFF_NEVENTS 1
+25_EFF_NEVENTS 1
+26_EFF_NEVENTS 1
+27_EFF_NEVENTS 1
+28_EFF_NEVENTS 1
+29_EFF_NEVENTS 1
+30_EFF_NEVENTS 1
+31_EFF_NEVENTS 1
+32_EFF_NEVENTS 1
+33_EFF_NEVENTS 1
+34_EFF_NEVENTS 1
+35_EFF_NEVENTS 1
+36_EFF_NEVENTS 1
+37_EFF_NEVENTS 1
+38_EFF_NEVENTS 1
+39_EFF_NEVENTS 1
+40_EFF_NEVENTS 1
+41_EFF_NEVENTS 1
+42_EFF_NEVENTS 1
+43_EFF_NEVENTS 1
+44_EFF_NEVENTS 1
+45_EFF_NEVENTS 1
+46_EFF_NEVENTS 1
+47_EFF_NEVENTS 1
+48_EFF_NEVENTS 1
+49_EFF_NEVENTS 1
+50_EFF_NEVENTS 1
+51_EFF_NEVENTS 1
+52_EFF_NEVENTS 1
+53_EFF_NEVENTS 1
+54_EFF_NEVENTS 1
+55_EFF_NEVENTS 1
+56_EFF_NEVENTS 1
+57_EFF_NEVENTS 1
+58_EFF_NEVENTS 1
+59_EFF_NEVENTS 1
+60_EFF_NEVENTS 1
+61_EFF_NEVENTS 1
+62_EFF_NEVENTS 1
+63_EFF_NEVENTS 1
+64_EFF_NEVENTS 1
+65_EFF_NEVENTS 1
+66_EFF_NEVENTS 1
+67_EFF_NEVENTS 1
+68_EFF_NEVENTS 1
+69_EFF_NEVENTS 1
+70_EFF_NEVENTS 1
+71_EFF_NEVENTS 1
+72_EFF_NEVENTS 1
+73_EFF_NEVENTS 1
+74_EFF_NEVENTS 1
+75_EFF_NEVENTS 1
+76_EFF_NEVENTS 1
+77_EFF_NEVENTS 1
+78_EFF_NEVENTS 1
+79_EFF_NEVENTS 1
+80_EFF_NEVENTS 1
+81_EFF_NEVENTS 1
+82_EFF_NEVENTS 1
+83_EFF_NEVENTS 1
+84_EFF_NEVENTS 1
+85_EFF_NEVENTS 1
+86_EFF_NEVENTS 1
+87_EFF_NEVENTS 1
+88_EFF_NEVENTS 1
+89_EFF_NEVENTS 1
+90_EFF_NEVENTS 1
+91_EFF_NEVENTS 1
+92_EFF_NEVENTS 1
+93_EFF_NEVENTS 1
+94_EFF_NEVENTS 1
+95_EFF_NEVENTS 1
+96_EFF_NEVENTS 1
+97_EFF_NEVENTS 1
+98_EFF_NEVENTS 1
+99_EFF_NEVENTS 1
+#
+# Which input experiments (sk versions etc) it affects
+# 0: no, 1: yes
+# Enter as many columns as N_EXP separated by space, and in order (1st entry is 1st exp etc.)
+# Typically detector systematics are affecting 1 experiment only, but interaction/flux sys
+# should affect all experiments
+01_EFF_EXP 1 0 0 0 0
+02_EFF_EXP 0 1 0 0 0
+03_EFF_EXP 0 0 1 0 0
+04_EFF_EXP 0 0 0 1 0
+05_EFF_EXP 0 0 0 0 1
+06_EFF_EXP 1 0 0 0 0
+07_EFF_EXP 0 1 0 0 0
+08_EFF_EXP 0 0 1 0 0
+09_EFF_EXP 0 0 0 1 0
+10_EFF_EXP 0 0 0 0 1
+11_EFF_EXP 1 1 1 1 1
+12_EFF_EXP 1 1 1 1 1
+13_EFF_EXP 0 0 0 1 0
+14_EFF_EXP 0 0 0 1 0
+15_EFF_EXP 0 0 0 1 0
+16_EFF_EXP 1 1 1 1 1
+17_EFF_EXP 1 1 1 1 1
+18_EFF_EXP 1 1 1 1 1
+19_EFF_EXP 1 1 1 1 1 
+20_EFF_EXP 1 1 1 1 1 
+21_EFF_EXP 1 1 1 1 1 
+22_EFF_EXP 1 1 1 1 1 
+23_EFF_EXP 1 1 1 1 1 
+24_EFF_EXP 1 1 1 1 1
+25_EFF_EXP 1 1 1 1 1
+26_EFF_EXP 1 1 1 1 1
+27_EFF_EXP 1 1 1 1 1
+28_EFF_EXP 1 1 1 1 1
+29_EFF_EXP 1 1 1 1 1
+30_EFF_EXP 1 1 1 1 1
+31_EFF_EXP 1 1 1 1 1
+32_EFF_EXP 1 1 1 1 1
+33_EFF_EXP 1 1 1 1 1
+34_EFF_EXP 1 1 1 1 1
+35_EFF_EXP 1 1 1 1 1
+36_EFF_EXP 1 1 1 1 1
+37_EFF_EXP 1 1 1 1 1
+38_EFF_EXP 1 1 1 1 1
+39_EFF_EXP 1 1 1 1 1
+40_EFF_EXP 1 1 1 1 1
+41_EFF_EXP 1 1 1 1 1
+42_EFF_EXP 1 1 1 1 1
+43_EFF_EXP 1 1 1 1 1
+44_EFF_EXP 1 1 1 1 1
+45_EFF_EXP 1 1 1 1 1
+46_EFF_EXP 1 1 1 1 1
+47_EFF_EXP 1 1 1 1 1
+48_EFF_EXP 1 1 1 1 1
+49_EFF_EXP 1 1 1 1 1
+50_EFF_EXP 1 1 1 1 1
+51_EFF_EXP 1 1 1 1 1
+52_EFF_EXP 1 1 1 1 1
+53_EFF_EXP 1 1 1 1 1
+54_EFF_EXP 1 1 1 1 1
+55_EFF_EXP 1 1 1 1 1
+56_EFF_EXP 1 1 1 1 1
+57_EFF_EXP 1 1 1 1 1
+58_EFF_EXP 1 1 1 1 1
+59_EFF_EXP 1 1 1 1 1
+60_EFF_EXP 1 1 1 1 1
+61_EFF_EXP 1 1 1 1 1
+62_EFF_EXP 1 1 1 1 1
+63_EFF_EXP 1 1 1 1 1
+64_EFF_EXP 1 1 1 1 1
+65_EFF_EXP 1 1 1 1 1
+66_EFF_EXP 1 1 1 1 1
+67_EFF_EXP 1 1 1 1 1
+68_EFF_EXP 1 1 1 1 1
+69_EFF_EXP 1 1 1 1 1
+70_EFF_EXP 1 1 1 1 1
+71_EFF_EXP 1 1 1 1 1
+72_EFF_EXP 1 1 1 1 1
+73_EFF_EXP 1 1 1 1 1
+74_EFF_EXP 1 1 1 1 1
+75_EFF_EXP 1 1 1 1 1
+76_EFF_EXP 1 1 1 1 1
+77_EFF_EXP 1 1 1 1 1
+78_EFF_EXP 1 1 1 1 1
+79_EFF_EXP 1 1 1 1 1
+80_EFF_EXP 1 1 1 1 1
+81_EFF_EXP 1 1 1 1 1
+82_EFF_EXP 1 1 1 1 1
+83_EFF_EXP 1 1 1 1 1
+84_EFF_EXP 1 1 1 1 1
+85_EFF_EXP 1 1 1 1 1
+86_EFF_EXP 1 1 1 1 1
+87_EFF_EXP 1 1 1 1 1
+88_EFF_EXP 1 1 1 1 1
+89_EFF_EXP 1 1 1 1 1
+90_EFF_EXP 1 1 1 1 1
+91_EFF_EXP 1 1 1 1 1
+92_EFF_EXP 1 1 1 1 1
+93_EFF_EXP 1 1 1 1 1
+94_EFF_EXP 1 1 1 1 1
+95_EFF_EXP 1 1 1 1 1
+96_EFF_EXP 1 1 1 1 1
+97_EFF_EXP 1 1 1 1 1
+98_EFF_EXP 1 1 1 1 1
+99_EFF_EXP 1 1 1 1 1
+#
+# Which input interactions (nueO, IBD etc) it affects
+# 0: no, 1: yes
+# Enter as many columns as N_INT separated by space, and in order (1st entry is 1st int etc.)
+# Typically detector systematics are affecting all interactions but interaction sys
+# should affect a single interaction. Flux can be both (whether it is nue flux, or all neutrino
+# flux etc)
+01_EFF_INT 1 1 1 1 
+02_EFF_INT 1 1 1 1
+03_EFF_INT 1 1 1 1
+04_EFF_INT 1 1 1 1
+05_EFF_INT 1 1 1 1
+06_EFF_INT 1 1 1 1 
+07_EFF_INT 1 1 1 1
+08_EFF_INT 1 1 1 1
+09_EFF_INT 1 1 1 1
+10_EFF_INT 1 1 1 1
+11_EFF_INT 1 0 0 0
+12_EFF_INT 0 1 0 0
+13_EFF_INT 1 1 1 1
+14_EFF_INT 1 0 0 0
+15_EFF_INT 0 1 0 0
+16_EFF_INT 1 0 0 0
+17_EFF_INT 0 1 0 0
+18_EFF_INT 0 1 0 0
+19_EFF_INT 1 1 1 1 
+20_EFF_INT 1 1 1 1 
+21_EFF_INT 1 1 1 1 
+22_EFF_INT 1 1 1 1 
+23_EFF_INT 1 1 1 1 
+24_EFF_INT 1 1 1 1
+25_EFF_INT 1 1 1 1
+26_EFF_INT 1 1 1 1
+27_EFF_INT 1 1 1 1
+28_EFF_INT 1 1 1 1
+29_EFF_INT 1 1 1 1
+30_EFF_INT 1 1 1 1
+31_EFF_INT 1 1 1 1
+32_EFF_INT 1 1 1 1
+33_EFF_INT 1 1 1 1
+34_EFF_INT 1 1 1 1
+35_EFF_INT 1 1 1 1
+36_EFF_INT 1 1 1 1
+37_EFF_INT 1 1 1 1
+38_EFF_INT 1 1 1 1
+39_EFF_INT 1 1 1 1
+40_EFF_INT 1 1 1 1
+41_EFF_INT 1 1 1 1
+42_EFF_INT 1 1 1 1
+43_EFF_INT 1 1 1 1
+44_EFF_INT 1 1 1 1
+45_EFF_INT 1 1 1 1
+46_EFF_INT 1 1 1 1
+47_EFF_INT 1 1 1 1
+48_EFF_INT 1 1 1 1
+49_EFF_INT 1 1 1 1
+50_EFF_INT 1 1 1 1
+51_EFF_INT 1 1 1 1
+52_EFF_INT 1 1 1 1
+53_EFF_INT 1 1 1 1
+54_EFF_INT 1 1 1 1
+55_EFF_INT 1 1 1 1
+56_EFF_INT 1 1 1 1
+57_EFF_INT 1 1 1 1
+58_EFF_INT 1 1 1 1
+59_EFF_INT 1 1 1 1
+60_EFF_INT 1 1 1 1
+61_EFF_INT 1 1 1 1
+62_EFF_INT 1 1 1 1
+63_EFF_INT 1 1 1 1
+64_EFF_INT 1 1 1 1
+65_EFF_INT 1 1 1 1
+66_EFF_INT 1 1 1 1
+67_EFF_INT 1 1 1 1
+68_EFF_INT 1 1 1 1
+69_EFF_INT 1 1 1 1
+70_EFF_INT 1 1 1 1
+71_EFF_INT 1 1 1 1
+72_EFF_INT 1 1 1 1
+73_EFF_INT 1 1 1 1
+74_EFF_INT 1 1 1 1
+75_EFF_INT 1 1 1 1
+76_EFF_INT 1 1 1 1
+77_EFF_INT 1 1 1 1
+78_EFF_INT 1 1 1 1
+79_EFF_INT 1 1 1 1
+80_EFF_INT 1 1 1 1
+81_EFF_INT 1 1 1 1
+82_EFF_INT 1 1 1 1
+83_EFF_INT 1 1 1 1
+84_EFF_INT 1 1 1 1
+85_EFF_INT 1 1 1 1
+86_EFF_INT 1 1 1 1
+87_EFF_INT 1 1 1 1
+88_EFF_INT 1 1 1 1
+89_EFF_INT 1 1 1 1
+90_EFF_INT 1 1 1 1
+91_EFF_INT 1 1 1 1
+92_EFF_INT 1 1 1 1
+93_EFF_INT 1 1 1 1
+94_EFF_INT 1 1 1 1
+95_EFF_INT 1 1 1 1
+96_EFF_INT 1 1 1 1
+97_EFF_INT 1 1 1 1
+98_EFF_INT 1 1 1 1
+99_EFF_INT 1 1 1 1
+#
+# Whether to fix the systematic in its initial value during fitting: Use this if you may want
+# to fix just a few of the systematics, if all is required to be fixed then can use
+# FIX_SYSTEMATICS option above
+01_IS_FIXED 0
+02_IS_FIXED 0
+03_IS_FIXED 0
+04_IS_FIXED 0
+05_IS_FIXED 0
+06_IS_FIXED 0
+07_IS_FIXED 0
+08_IS_FIXED 0
+09_IS_FIXED 0
+10_IS_FIXED 0
+11_IS_FIXED 0
+12_IS_FIXED 0
+13_IS_FIXED 0
+14_IS_FIXED 0
+15_IS_FIXED 0
+16_IS_FIXED 0
+17_IS_FIXED 0
+18_IS_FIXED 0
+19_IS_FIXED 0 
+20_IS_FIXED 0 
+21_IS_FIXED 0 
+22_IS_FIXED 0 
+23_IS_FIXED 0 
+24_IS_FIXED 0
+25_IS_FIXED 0
+26_IS_FIXED 0
+27_IS_FIXED 0
+28_IS_FIXED 0
+29_IS_FIXED 0
+30_IS_FIXED 0
+31_IS_FIXED 0
+32_IS_FIXED 0
+33_IS_FIXED 0
+34_IS_FIXED 0
+35_IS_FIXED 0
+36_IS_FIXED 0
+37_IS_FIXED 0
+38_IS_FIXED 0
+39_IS_FIXED 0
+40_IS_FIXED 0
+41_IS_FIXED 0
+42_IS_FIXED 0
+43_IS_FIXED 0
+44_IS_FIXED 0
+45_IS_FIXED 0
+46_IS_FIXED 0
+47_IS_FIXED 0
+48_IS_FIXED 0
+49_IS_FIXED 0
+50_IS_FIXED 0
+51_IS_FIXED 0
+52_IS_FIXED 0
+53_IS_FIXED 0
+54_IS_FIXED 0
+55_IS_FIXED 0
+56_IS_FIXED 0
+57_IS_FIXED 0
+58_IS_FIXED 0
+59_IS_FIXED 0
+60_IS_FIXED 0
+61_IS_FIXED 0
+62_IS_FIXED 0
+63_IS_FIXED 0
+64_IS_FIXED 0
+65_IS_FIXED 0
+66_IS_FIXED 0
+67_IS_FIXED 0
+68_IS_FIXED 0
+69_IS_FIXED 0
+70_IS_FIXED 0
+71_IS_FIXED 0
+72_IS_FIXED 0
+73_IS_FIXED 0
+74_IS_FIXED 0
+75_IS_FIXED 0
+76_IS_FIXED 0
+77_IS_FIXED 0
+78_IS_FIXED 0
+79_IS_FIXED 0
+80_IS_FIXED 0
+81_IS_FIXED 0
+82_IS_FIXED 0
+83_IS_FIXED 0
+84_IS_FIXED 0
+85_IS_FIXED 0
+86_IS_FIXED 0
+87_IS_FIXED 0
+88_IS_FIXED 0
+89_IS_FIXED 0
+90_IS_FIXED 0
+91_IS_FIXED 0
+92_IS_FIXED 0
+93_IS_FIXED 0
+94_IS_FIXED 0
+95_IS_FIXED 0
+96_IS_FIXED 0
+97_IS_FIXED 0
+98_IS_FIXED 0
+99_IS_FIXED 0
+#
+# 1-Sigma of The Systematic: 
+# For systematics that have 1 sigma weights in MC trees, just enter 1
+# For other systematics (energy scale etc.) just enter % variation at 1 sigma
+01_SYS_SIGMA 3.3 
+02_SYS_SIGMA 2.0
+03_SYS_SIGMA 2.4
+04_SYS_SIGMA 2.1
+05_SYS_SIGMA 1.8
+06_SYS_SIGMA 1.0 
+07_SYS_SIGMA 1.0
+08_SYS_SIGMA 1.0
+09_SYS_SIGMA 1.0
+10_SYS_SIGMA 1.0
+11_SYS_SIGMA 1.0
+12_SYS_SIGMA 1.0
+13_SYS_SIGMA 1.0
+14_SYS_SIGMA 1.0
+15_SYS_SIGMA 1.0
+16_SYS_SIGMA 1.0
+17_SYS_SIGMA 1.0
+18_SYS_SIGMA 1.0
+19_SYS_SIGMA 1.0 
+20_SYS_SIGMA 1.0 
+21_SYS_SIGMA 1.0 
+22_SYS_SIGMA 1.0 
+23_SYS_SIGMA 1.0 
+24_SYS_SIGMA 1.0
+25_SYS_SIGMA 1.0
+26_SYS_SIGMA 1.0
+27_SYS_SIGMA 1.0
+28_SYS_SIGMA 1.0
+29_SYS_SIGMA 1.0
+30_SYS_SIGMA 1.0
+31_SYS_SIGMA 1.0
+32_SYS_SIGMA 1.0
+33_SYS_SIGMA 1.0
+34_SYS_SIGMA 1.0
+35_SYS_SIGMA 1.0
+36_SYS_SIGMA 1.0
+37_SYS_SIGMA 1.0
+38_SYS_SIGMA 1.0
+39_SYS_SIGMA 1.0
+40_SYS_SIGMA 1.0
+41_SYS_SIGMA 1.0
+42_SYS_SIGMA 1.0
+43_SYS_SIGMA 1.0
+44_SYS_SIGMA 1.0
+45_SYS_SIGMA 1.0
+46_SYS_SIGMA 1.0
+47_SYS_SIGMA 1.0
+48_SYS_SIGMA 1.0
+49_SYS_SIGMA 1.0
+50_SYS_SIGMA 1.0
+51_SYS_SIGMA 1.0
+52_SYS_SIGMA 1.0
+53_SYS_SIGMA 1.0
+54_SYS_SIGMA 1.0
+55_SYS_SIGMA 1.0
+56_SYS_SIGMA 1.0
+57_SYS_SIGMA 1.0
+58_SYS_SIGMA 1.0
+59_SYS_SIGMA 1.0
+60_SYS_SIGMA 1.0
+61_SYS_SIGMA 1.0
+62_SYS_SIGMA 1.0
+63_SYS_SIGMA 1.0
+64_SYS_SIGMA 1.0
+65_SYS_SIGMA 1.0
+66_SYS_SIGMA 1.0
+67_SYS_SIGMA 1.0
+68_SYS_SIGMA 1.0
+69_SYS_SIGMA 1.0
+70_SYS_SIGMA 1.0
+71_SYS_SIGMA 1.0
+72_SYS_SIGMA 1.0
+73_SYS_SIGMA 1.0
+74_SYS_SIGMA 1.0
+75_SYS_SIGMA 1.0
+76_SYS_SIGMA 1.0
+77_SYS_SIGMA 1.0
+78_SYS_SIGMA 1.0
+79_SYS_SIGMA 1.0
+80_SYS_SIGMA 1.0
+81_SYS_SIGMA 1.0
+82_SYS_SIGMA 1.0
+83_SYS_SIGMA 1.0
+84_SYS_SIGMA 1.0
+85_SYS_SIGMA 1.0
+86_SYS_SIGMA 1.0
+87_SYS_SIGMA 1.0
+88_SYS_SIGMA 1.0
+89_SYS_SIGMA 1.0
+90_SYS_SIGMA 1.0
+91_SYS_SIGMA 1.0
+92_SYS_SIGMA 1.0
+93_SYS_SIGMA 1.0
+94_SYS_SIGMA 1.0
+95_SYS_SIGMA 1.0
+96_SYS_SIGMA 1.0
+97_SYS_SIGMA 1.0
+98_SYS_SIGMA 1.0
+99_SYS_SIGMA 1.0
+#
+# Initial value of systematic for the fit 
+01_SYS_INIT_VAL 0
+02_SYS_INIT_VAL 0
+03_SYS_INIT_VAL 0
+04_SYS_INIT_VAL 0
+05_SYS_INIT_VAL 0
+06_SYS_INIT_VAL 0
+07_SYS_INIT_VAL 0
+08_SYS_INIT_VAL 0
+09_SYS_INIT_VAL 0
+10_SYS_INIT_VAL 0
+11_SYS_INIT_VAL 0
+12_SYS_INIT_VAL 0
+13_SYS_INIT_VAL 0
+14_SYS_INIT_VAL 0
+15_SYS_INIT_VAL 0
+16_SYS_INIT_VAL 0
+17_SYS_INIT_VAL 0
+18_SYS_INIT_VAL 0
+19_SYS_INIT_VAL 0 
+20_SYS_INIT_VAL 0 
+21_SYS_INIT_VAL 0 
+22_SYS_INIT_VAL 0 
+23_SYS_INIT_VAL 0 
+24_SYS_INIT_VAL 0
+25_SYS_INIT_VAL 0
+26_SYS_INIT_VAL 0
+27_SYS_INIT_VAL 0
+28_SYS_INIT_VAL 0
+29_SYS_INIT_VAL 0
+30_SYS_INIT_VAL 0
+31_SYS_INIT_VAL 0
+32_SYS_INIT_VAL 0
+33_SYS_INIT_VAL 0
+34_SYS_INIT_VAL 0
+35_SYS_INIT_VAL 0
+36_SYS_INIT_VAL 0
+37_SYS_INIT_VAL 0
+38_SYS_INIT_VAL 0
+39_SYS_INIT_VAL 0
+40_SYS_INIT_VAL 0
+41_SYS_INIT_VAL 0
+42_SYS_INIT_VAL 0
+43_SYS_INIT_VAL 0
+44_SYS_INIT_VAL 0
+45_SYS_INIT_VAL 0
+46_SYS_INIT_VAL 0
+47_SYS_INIT_VAL 0
+48_SYS_INIT_VAL 0
+49_SYS_INIT_VAL 0
+50_SYS_INIT_VAL 0
+51_SYS_INIT_VAL 0
+52_SYS_INIT_VAL 0
+53_SYS_INIT_VAL 0
+54_SYS_INIT_VAL 0
+55_SYS_INIT_VAL 0
+56_SYS_INIT_VAL 0
+57_SYS_INIT_VAL 0
+58_SYS_INIT_VAL 0
+59_SYS_INIT_VAL 0
+60_SYS_INIT_VAL 0
+61_SYS_INIT_VAL 0
+62_SYS_INIT_VAL 0
+63_SYS_INIT_VAL 0
+64_SYS_INIT_VAL 0
+65_SYS_INIT_VAL 0
+66_SYS_INIT_VAL 0
+67_SYS_INIT_VAL 0
+68_SYS_INIT_VAL 0
+69_SYS_INIT_VAL 0
+70_SYS_INIT_VAL 0
+71_SYS_INIT_VAL 0
+72_SYS_INIT_VAL 0
+73_SYS_INIT_VAL 0
+74_SYS_INIT_VAL 0
+75_SYS_INIT_VAL 0
+76_SYS_INIT_VAL 0
+77_SYS_INIT_VAL 0
+78_SYS_INIT_VAL 0
+79_SYS_INIT_VAL 0
+80_SYS_INIT_VAL 0
+81_SYS_INIT_VAL 0
+82_SYS_INIT_VAL 0
+83_SYS_INIT_VAL 0
+84_SYS_INIT_VAL 0
+85_SYS_INIT_VAL 0
+86_SYS_INIT_VAL 0
+87_SYS_INIT_VAL 0
+88_SYS_INIT_VAL 0
+89_SYS_INIT_VAL 0
+90_SYS_INIT_VAL 0
+91_SYS_INIT_VAL 0
+92_SYS_INIT_VAL 0
+93_SYS_INIT_VAL 0
+94_SYS_INIT_VAL 0
+95_SYS_INIT_VAL 0
+96_SYS_INIT_VAL 0
+97_SYS_INIT_VAL 0
+98_SYS_INIT_VAL 0
+99_SYS_INIT_VAL 0
+#
+# Gaussian sigma for randomly determinining alternative starting values for a fit 
+01_SYS_INIT_SIGMA 0.25
+02_SYS_INIT_SIGMA 0.25
+03_SYS_INIT_SIGMA 0.25
+04_SYS_INIT_SIGMA 0.25
+05_SYS_INIT_SIGMA 0.25
+06_SYS_INIT_SIGMA 0.25
+07_SYS_INIT_SIGMA 0.25
+08_SYS_INIT_SIGMA 0.25
+09_SYS_INIT_SIGMA 0.25
+10_SYS_INIT_SIGMA 0.25
+11_SYS_INIT_SIGMA 0.25
+12_SYS_INIT_SIGMA 0.25
+13_SYS_INIT_SIGMA 0.25
+14_SYS_INIT_SIGMA 0.25
+15_SYS_INIT_SIGMA 0.25
+16_SYS_INIT_SIGMA 0.25
+17_SYS_INIT_SIGMA 0.25
+18_SYS_INIT_SIGMA 0.25
+19_SYS_INIT_SIGMA 0.25 
+20_SYS_INIT_SIGMA 0.25 
+21_SYS_INIT_SIGMA 0.25 
+22_SYS_INIT_SIGMA 0.25 
+23_SYS_INIT_SIGMA 0.25 
+24_SYS_INIT_SIGMA 0.25
+25_SYS_INIT_SIGMA 0.25
+26_SYS_INIT_SIGMA 0.25
+27_SYS_INIT_SIGMA 0.25
+28_SYS_INIT_SIGMA 0.25
+29_SYS_INIT_SIGMA 0.25
+30_SYS_INIT_SIGMA 0.25
+31_SYS_INIT_SIGMA 0.25
+32_SYS_INIT_SIGMA 0.25
+33_SYS_INIT_SIGMA 0.25
+34_SYS_INIT_SIGMA 0.25
+35_SYS_INIT_SIGMA 0.25
+36_SYS_INIT_SIGMA 0.25
+37_SYS_INIT_SIGMA 0.25
+38_SYS_INIT_SIGMA 0.25
+39_SYS_INIT_SIGMA 0.25
+40_SYS_INIT_SIGMA 0.25
+41_SYS_INIT_SIGMA 0.25
+42_SYS_INIT_SIGMA 0.25
+43_SYS_INIT_SIGMA 0.25
+44_SYS_INIT_SIGMA 0.25
+45_SYS_INIT_SIGMA 0.25
+46_SYS_INIT_SIGMA 0.25
+47_SYS_INIT_SIGMA 0.25
+48_SYS_INIT_SIGMA 0.25
+49_SYS_INIT_SIGMA 0.25
+50_SYS_INIT_SIGMA 0.25
+51_SYS_INIT_SIGMA 0.25
+52_SYS_INIT_SIGMA 0.25
+53_SYS_INIT_SIGMA 0.25
+54_SYS_INIT_SIGMA 0.25
+55_SYS_INIT_SIGMA 0.25
+56_SYS_INIT_SIGMA 0.25
+57_SYS_INIT_SIGMA 0.25
+58_SYS_INIT_SIGMA 0.25
+59_SYS_INIT_SIGMA 0.25
+60_SYS_INIT_SIGMA 0.25
+61_SYS_INIT_SIGMA 0.25
+62_SYS_INIT_SIGMA 0.25
+63_SYS_INIT_SIGMA 0.25
+64_SYS_INIT_SIGMA 0.25
+65_SYS_INIT_SIGMA 0.25
+66_SYS_INIT_SIGMA 0.25
+67_SYS_INIT_SIGMA 0.25
+68_SYS_INIT_SIGMA 0.25
+69_SYS_INIT_SIGMA 0.25
+70_SYS_INIT_SIGMA 0.25
+71_SYS_INIT_SIGMA 0.25
+72_SYS_INIT_SIGMA 0.25
+73_SYS_INIT_SIGMA 0.25
+74_SYS_INIT_SIGMA 0.25
+75_SYS_INIT_SIGMA 0.25
+76_SYS_INIT_SIGMA 0.25
+77_SYS_INIT_SIGMA 0.25
+78_SYS_INIT_SIGMA 0.25
+79_SYS_INIT_SIGMA 0.25
+80_SYS_INIT_SIGMA 0.25
+81_SYS_INIT_SIGMA 0.25
+82_SYS_INIT_SIGMA 0.25
+83_SYS_INIT_SIGMA 0.25
+84_SYS_INIT_SIGMA 0.25
+85_SYS_INIT_SIGMA 0.25
+86_SYS_INIT_SIGMA 0.25
+87_SYS_INIT_SIGMA 0.25
+88_SYS_INIT_SIGMA 0.25
+89_SYS_INIT_SIGMA 0.25
+90_SYS_INIT_SIGMA 0.25
+91_SYS_INIT_SIGMA 0.25
+92_SYS_INIT_SIGMA 0.25
+93_SYS_INIT_SIGMA 0.25
+94_SYS_INIT_SIGMA 0.25
+95_SYS_INIT_SIGMA 0.25
+96_SYS_INIT_SIGMA 0.25
+97_SYS_INIT_SIGMA 0.25
+98_SYS_INIT_SIGMA 0.25
+99_SYS_INIT_SIGMA 0.25
+#
+# Generating value of the systematic (When generating toy data these values will be used unless
+# sys values are also randomized)
+01_SYS_GEN_VAL 0
+02_SYS_GEN_VAL 0
+03_SYS_GEN_VAL 0
+04_SYS_GEN_VAL 0
+05_SYS_GEN_VAL 0
+06_SYS_GEN_VAL 0
+07_SYS_GEN_VAL 0
+08_SYS_GEN_VAL 0
+09_SYS_GEN_VAL 0
+10_SYS_GEN_VAL 0
+11_SYS_GEN_VAL 0
+12_SYS_GEN_VAL 0
+13_SYS_GEN_VAL 0
+14_SYS_GEN_VAL 0
+15_SYS_GEN_VAL 0
+16_SYS_GEN_VAL 0
+17_SYS_GEN_VAL 0
+18_SYS_GEN_VAL 0
+19_SYS_GEN_VAL 0 
+20_SYS_GEN_VAL 0 
+21_SYS_GEN_VAL 0 
+22_SYS_GEN_VAL 0 
+23_SYS_GEN_VAL 0 
+24_SYS_GEN_VAL 0
+25_SYS_GEN_VAL 0
+26_SYS_GEN_VAL 0
+27_SYS_GEN_VAL 0
+28_SYS_GEN_VAL 0
+29_SYS_GEN_VAL 0
+30_SYS_GEN_VAL 0
+31_SYS_GEN_VAL 0
+32_SYS_GEN_VAL 0
+33_SYS_GEN_VAL 0
+34_SYS_GEN_VAL 0
+35_SYS_GEN_VAL 0
+36_SYS_GEN_VAL 0
+37_SYS_GEN_VAL 0
+38_SYS_GEN_VAL 0
+39_SYS_GEN_VAL 0
+40_SYS_GEN_VAL 0
+41_SYS_GEN_VAL 0
+42_SYS_GEN_VAL 0
+43_SYS_GEN_VAL 0
+44_SYS_GEN_VAL 0
+45_SYS_GEN_VAL 0
+46_SYS_GEN_VAL 0
+47_SYS_GEN_VAL 0
+48_SYS_GEN_VAL 0
+49_SYS_GEN_VAL 0
+50_SYS_GEN_VAL 0
+51_SYS_GEN_VAL 0
+52_SYS_GEN_VAL 0
+53_SYS_GEN_VAL 0
+54_SYS_GEN_VAL 0
+55_SYS_GEN_VAL 0
+56_SYS_GEN_VAL 0
+57_SYS_GEN_VAL 0
+58_SYS_GEN_VAL 0
+59_SYS_GEN_VAL 0
+60_SYS_GEN_VAL 0
+61_SYS_GEN_VAL 0
+62_SYS_GEN_VAL 0
+63_SYS_GEN_VAL 0
+64_SYS_GEN_VAL 0
+65_SYS_GEN_VAL 0
+66_SYS_GEN_VAL 0
+67_SYS_GEN_VAL 0
+68_SYS_GEN_VAL 0
+69_SYS_GEN_VAL 0
+70_SYS_GEN_VAL 0
+71_SYS_GEN_VAL 0
+72_SYS_GEN_VAL 0
+73_SYS_GEN_VAL 0
+74_SYS_GEN_VAL 0
+75_SYS_GEN_VAL 0
+76_SYS_GEN_VAL 0
+77_SYS_GEN_VAL 0
+78_SYS_GEN_VAL 0
+79_SYS_GEN_VAL 0
+80_SYS_GEN_VAL 0
+81_SYS_GEN_VAL 0
+82_SYS_GEN_VAL 0
+83_SYS_GEN_VAL 0
+84_SYS_GEN_VAL 0
+85_SYS_GEN_VAL 0
+86_SYS_GEN_VAL 0
+87_SYS_GEN_VAL 0
+88_SYS_GEN_VAL 0
+89_SYS_GEN_VAL 0
+90_SYS_GEN_VAL 0
+91_SYS_GEN_VAL 0
+92_SYS_GEN_VAL 0
+93_SYS_GEN_VAL 0
+94_SYS_GEN_VAL 0
+95_SYS_GEN_VAL 0
+96_SYS_GEN_VAL 0
+97_SYS_GEN_VAL 0
+98_SYS_GEN_VAL 0
+99_SYS_GEN_VAL 0
+#
+# Systematic step size ratio to their sigma used in initializing fitter step size and calculating 
+# numerical derivatives: 1/100th should be small enough
+01_SYS_STEP_SIZE_RATIO 0.01
+02_SYS_STEP_SIZE_RATIO 0.01
+03_SYS_STEP_SIZE_RATIO 0.01
+04_SYS_STEP_SIZE_RATIO 0.01
+05_SYS_STEP_SIZE_RATIO 0.01
+06_SYS_STEP_SIZE_RATIO 0.01
+07_SYS_STEP_SIZE_RATIO 0.01
+08_SYS_STEP_SIZE_RATIO 0.01
+09_SYS_STEP_SIZE_RATIO 0.01
+10_SYS_STEP_SIZE_RATIO 0.01
+11_SYS_STEP_SIZE_RATIO 0.01
+12_SYS_STEP_SIZE_RATIO 0.01
+13_SYS_STEP_SIZE_RATIO 0.01
+14_SYS_STEP_SIZE_RATIO 0.01
+15_SYS_STEP_SIZE_RATIO 0.01
+16_SYS_STEP_SIZE_RATIO 0.01
+17_SYS_STEP_SIZE_RATIO 0.01
+18_SYS_STEP_SIZE_RATIO 0.01
+19_SYS_STEP_SIZE_RATIO 0.01 
+20_SYS_STEP_SIZE_RATIO 0.01 
+21_SYS_STEP_SIZE_RATIO 0.01 
+22_SYS_STEP_SIZE_RATIO 0.01 
+23_SYS_STEP_SIZE_RATIO 0.01 
+24_SYS_STEP_SIZE_RATIO 0.01
+25_SYS_STEP_SIZE_RATIO 0.01
+26_SYS_STEP_SIZE_RATIO 0.01
+27_SYS_STEP_SIZE_RATIO 0.01
+28_SYS_STEP_SIZE_RATIO 0.01
+29_SYS_STEP_SIZE_RATIO 0.01
+30_SYS_STEP_SIZE_RATIO 0.01
+31_SYS_STEP_SIZE_RATIO 0.01
+32_SYS_STEP_SIZE_RATIO 0.01
+33_SYS_STEP_SIZE_RATIO 0.01
+34_SYS_STEP_SIZE_RATIO 0.01
+35_SYS_STEP_SIZE_RATIO 0.01
+36_SYS_STEP_SIZE_RATIO 0.01
+37_SYS_STEP_SIZE_RATIO 0.01
+38_SYS_STEP_SIZE_RATIO 0.01
+39_SYS_STEP_SIZE_RATIO 0.01
+40_SYS_STEP_SIZE_RATIO 0.01
+41_SYS_STEP_SIZE_RATIO 0.01
+42_SYS_STEP_SIZE_RATIO 0.01
+43_SYS_STEP_SIZE_RATIO 0.01
+44_SYS_STEP_SIZE_RATIO 0.01
+45_SYS_STEP_SIZE_RATIO 0.01
+46_SYS_STEP_SIZE_RATIO 0.01
+47_SYS_STEP_SIZE_RATIO 0.01
+48_SYS_STEP_SIZE_RATIO 0.01
+49_SYS_STEP_SIZE_RATIO 0.01
+50_SYS_STEP_SIZE_RATIO 0.01
+51_SYS_STEP_SIZE_RATIO 0.01
+52_SYS_STEP_SIZE_RATIO 0.01
+53_SYS_STEP_SIZE_RATIO 0.01
+54_SYS_STEP_SIZE_RATIO 0.01
+55_SYS_STEP_SIZE_RATIO 0.01
+56_SYS_STEP_SIZE_RATIO 0.01
+57_SYS_STEP_SIZE_RATIO 0.01
+58_SYS_STEP_SIZE_RATIO 0.01
+59_SYS_STEP_SIZE_RATIO 0.01
+60_SYS_STEP_SIZE_RATIO 0.01
+61_SYS_STEP_SIZE_RATIO 0.01
+62_SYS_STEP_SIZE_RATIO 0.01
+63_SYS_STEP_SIZE_RATIO 0.01
+64_SYS_STEP_SIZE_RATIO 0.01
+65_SYS_STEP_SIZE_RATIO 0.01
+66_SYS_STEP_SIZE_RATIO 0.01
+67_SYS_STEP_SIZE_RATIO 0.01
+68_SYS_STEP_SIZE_RATIO 0.01
+69_SYS_STEP_SIZE_RATIO 0.01
+70_SYS_STEP_SIZE_RATIO 0.01
+71_SYS_STEP_SIZE_RATIO 0.01
+72_SYS_STEP_SIZE_RATIO 0.01
+73_SYS_STEP_SIZE_RATIO 0.01
+74_SYS_STEP_SIZE_RATIO 0.01
+75_SYS_STEP_SIZE_RATIO 0.01
+76_SYS_STEP_SIZE_RATIO 0.01
+77_SYS_STEP_SIZE_RATIO 0.01
+78_SYS_STEP_SIZE_RATIO 0.01
+79_SYS_STEP_SIZE_RATIO 0.01
+80_SYS_STEP_SIZE_RATIO 0.01
+81_SYS_STEP_SIZE_RATIO 0.01
+82_SYS_STEP_SIZE_RATIO 0.01
+83_SYS_STEP_SIZE_RATIO 0.01
+84_SYS_STEP_SIZE_RATIO 0.01
+85_SYS_STEP_SIZE_RATIO 0.01
+86_SYS_STEP_SIZE_RATIO 0.01
+87_SYS_STEP_SIZE_RATIO 0.01
+88_SYS_STEP_SIZE_RATIO 0.01
+89_SYS_STEP_SIZE_RATIO 0.01
+90_SYS_STEP_SIZE_RATIO 0.01
+91_SYS_STEP_SIZE_RATIO 0.01
+92_SYS_STEP_SIZE_RATIO 0.01
+93_SYS_STEP_SIZE_RATIO 0.01
+94_SYS_STEP_SIZE_RATIO 0.01
+95_SYS_STEP_SIZE_RATIO 0.01
+96_SYS_STEP_SIZE_RATIO 0.01
+97_SYS_STEP_SIZE_RATIO 0.01
+98_SYS_STEP_SIZE_RATIO 0.01
+99_SYS_STEP_SIZE_RATIO 0.01

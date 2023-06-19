@@ -1,0 +1,254 @@
+/********
+*Author: Baran Bodur
+*Date: 2021-07-13
+*Description: Make PDFs from input tree, to be used in fitting later
+*
+********/
+
+// c++ headers
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <vector>
+#include <algorithm>
+#include <functional>
+#include <numeric>
+// ROOT headers
+#include "TMath.h"
+#include "TString.h"
+// project headers
+#include "fitPdf.h"
+#include "mockData.h"
+
+using namespace std;
+
+// Simple function to print data points
+void printDataPoint(DataPoint dP) {
+	cout << "Visible Energy: " << dP.eVis << endl;
+	cout << "Gamma Taggin Output: " << dP.gTag << endl;
+	cout << "Neutrons Tagged: " << dP.nTag << endl;
+	cout << "Cos(Zenith) Angle: " << dP.cosZen << endl;
+	cout << "Azimuth Angle: " << dP.azi << endl;
+	cout << "Weight: " << dP.weight << endl;
+}
+
+// Constructor
+MockData::MockData(TString inName, const int nPdf, FitPdf *inPdf[], bool poisson) {
+	
+	// Prepare rng
+	randAlThor = new TRandom3();
+	randAlThor->SetSeed(0);
+	
+	//Setup
+	name = inName; // copy name
+	nType = nPdf; // type of interactions
+
+	// Decide how many events from which pdf, based on simEvents of each pdf 
+	nPoints = 0;
+	totalWeight = 0;
+	if(poisson == false) {
+		for(unsigned int p=0; p<nType; p++) {
+			byTypeEvents.push_back(round(inPdf[p]->simEvents));			
+			totalWeight += byTypeEvents[p];
+			nPoints += byTypeEvents[p];
+			cout << inPdf[p]->pdfName << " Exp Ctr: " << inPdf[p]->simEvents << " Gen: "
+				<< byTypeEvents[p] << endl;
+		} // end of loop over pdfs
+	} // end of no poisson
+	else if(poisson == true) {
+		for(unsigned int p=0; p<nType; p++) {
+			//byTypeEvents.push_back(randAlThor->Poisson(inPdf[p]->simEvents));			
+			byTypeEvents.push_back(gRandom->Poisson(inPdf[p]->simEvents));			
+			totalWeight += byTypeEvents[p];
+			nPoints += byTypeEvents[p];
+			cout << inPdf[p]->pdfName << " Exp Ctr: " << inPdf[p]->simEvents << " Gen: "
+				<< byTypeEvents[p] << endl;
+		} // end of loop over pdfs
+	} // end of if poisson fluc
+
+	// Create data points according to pdfs
+	for(unsigned int p=0; p<nType; p++) {
+		for(unsigned int d=0; d<byTypeEvents[p]; d++) {
+			//cout << "Pdf: " << inPdf[p]->pdfName << " Event: " << d+1 << "/" << byTypeEvents[p] << endl;
+			DataPoint temp = inPdf[p]->getRandPoint(); 	
+			dataPoint.push_back(temp);			
+		} // end of loop over # of events in a pdf
+	} // end of loop over pdfs
+	
+	histFlag = false; // no histograms yet, flag off
+} // end of constructor!
+	
+MockData::~MockData() { // Destructor
+/*
+	if(histFlag == true) {
+		delete hEvisProjN0;	
+		delete hEvisProjN1;	
+		delete hEvisProjNall;	
+		delete hGtagProjN0;	
+		delete hGtagProjN1;	
+		delete hGtagProjNall;	
+		delete hEgN0;
+		delete hEgN1;
+		delete hEgNall;
+		delete hNtagProj;
+		delete hCosZenProj;
+		delete hAziProj;
+	}
+	*/
+} // end of destructor
+
+void MockData::printEvent(unsigned int eNoIn) { // Print Event Info
+	unsigned int eNo = eNoIn;
+	if(eNo >= nPoints) {
+		cout << " Event No too large, printing last event instead!" << endl;
+		eNo = nPoints -1;
+	}
+
+	cout << name << " DataPoint: " << eNo << endl;
+	cout << "eVis: " << dataPoint[eNo].eVis << endl;
+	cout << "gTag: " << dataPoint[eNo].gTag << endl;
+	cout << "nTag: " << dataPoint[eNo].nTag << endl;
+	cout << "Cos(Zenith) Angle: " << dataPoint[eNo].cosZen << endl;
+	cout << "Azimuth Angle: " << dataPoint[eNo].azi << endl;
+	cout << "weight: " << dataPoint[eNo].weight << endl;
+
+} // end of printEvent
+
+void MockData::initProjHists(FitPdf *inPdf) { // init data projection hists
+	
+	TString hName; // init a string for name
+	
+	// Prep names and hists
+	hName = "hpEvis_" + name + "_N0";
+	hEvisProjN0 = (TH1D*) inPdf->hEvisProjN0->Clone(hName);
+	hEvisProjN0->SetTitle(hName);
+	hEvisProjN0->Reset();
+	
+	hName = "hpEvis_" + name + "_N1";
+	hEvisProjN1 = (TH1D*) inPdf->hEvisProjN1->Clone(hName);
+	hEvisProjN1->SetTitle(hName);
+	hEvisProjN1->Reset();
+	
+	hName = "hpEvis_" + name + "_Nall";
+	hEvisProjNall = (TH1D*) inPdf->hEvisProjNall->Clone(hName);
+	hEvisProjNall->SetTitle(hName);
+	hEvisProjNall->Reset();
+	
+	hName = "hpGtag_" + name + "_N0";
+	hGtagProjN0 = (TH1D*) inPdf->hGtagProjN0->Clone(hName);
+	hGtagProjN0->SetTitle(hName);
+	hGtagProjN0->Reset();
+	
+	hName = "hpGtag_" + name + "_N1";
+	hGtagProjN1 = (TH1D*) inPdf->hGtagProjN1->Clone(hName);
+	hGtagProjN1->SetTitle(hName);
+	hGtagProjN1->Reset();
+	
+	hName = "hpGtag_" + name + "_Nall";
+	hGtagProjNall = (TH1D*) inPdf->hGtagProjNall->Clone(hName);
+	hGtagProjNall->SetTitle(hName);
+	hGtagProjNall->Reset();
+	
+	hName = "hpNtag_" + name;
+	//hNtagProj = (TH1D*) inPdf->hNtagProj->Clone(hName);
+	hNtagProj = new TH1D(hName,hName,2,0,2);
+	hNtagProj->SetTitle(hName);
+	hNtagProj->Reset();
+
+	hName = "hEg_" + name + "_N0";
+	if(inPdf->neutInfType == 0) hEgN0 = (TH2F*) inPdf->hsEgNall->Clone(hName);
+	else hEgN0 = (TH2F*) inPdf->hsEgN0->Clone(hName);
+	hEgN0->SetTitle(hName);
+	hEgN0->Reset();
+	
+	hName = "hEg_" + name + "_N1";
+	hEgN1 = (TH2F*) hEgN0->Clone(hName);
+	hEgN1->SetTitle(hName);
+	hEgN1->Reset();
+	
+	hName = "hEg_" + name + "_Nall";
+	hEgNall = (TH2F*) hEgN0->Clone(hName);
+	hEgNall->SetTitle(hName);
+	hEgNall->Reset();
+	
+	hName = "hpCosZen_" + name;
+	hCosZenProj = (TH1D*) inPdf->hCosZenProj->Clone(hName);
+	hCosZenProj->SetTitle(hName);
+	hCosZenProj->Reset();
+	
+	hName = "hpAzi_" + name;
+	hAziProj = (TH1D*) inPdf->hAziProj->Clone(hName);
+	hAziProj->SetTitle(hName);
+	hAziProj->Reset();
+
+	// Also push them into vector:
+	projHists.push_back(hEvisProjN0);
+	projHists.push_back(hEvisProjN1);
+	projHists.push_back(hEvisProjNall);
+	projHists.push_back(hGtagProjN0);
+	projHists.push_back(hGtagProjN1);
+	projHists.push_back(hGtagProjNall);
+	projHists.push_back(hNtagProj);
+	projHists.push_back(hCosZenProj);
+	projHists.push_back(hAziProj);
+	
+	histFlag = true; // set histFlag since histograms are inited
+
+} // end of initProjHis
+
+void MockData::fillProjHists() { // fill data projection hists with the created mock data
+	if(histFlag == false) {
+		cout << "Histograms Not Initialized, cannot Fill them!" << endl;
+		return;
+	}
+		
+	for(unsigned int d=0; d<nPoints; d++) { // loop over data points
+		DataPoint dCur = dataPoint[d];
+		hEvisProjNall->Fill(dCur.eVis, dCur.weight);
+		hGtagProjNall->Fill(dCur.gTag, dCur.weight);
+		hEgNall->Fill(dCur.eVis,dCur.gTag,dCur.weight);
+		hNtagProj->Fill(dCur.nTag, dCur.weight);
+		hCosZenProj->Fill(dCur.cosZen, dCur.weight);
+		hAziProj->Fill(dCur.azi, dCur.weight);
+		if(dCur.nTag==0) {
+			hEvisProjN0->Fill(dCur.eVis,dCur.weight);
+			hGtagProjN0->Fill(dCur.gTag, dCur.weight);
+			hEgN0->Fill(dCur.eVis,dCur.gTag,dCur.weight);
+		} // end of ntag==0
+		if(dCur.nTag==1) {
+			hEvisProjN1->Fill(dCur.eVis, dCur.weight);
+			hGtagProjN1->Fill(dCur.gTag, dCur.weight);
+			hEgN1->Fill(dCur.eVis,dCur.gTag,dCur.weight);
+		} // end of if ntag==1
+		
+	} // end of loop over data points
+} // end of fillProjHis
+
+void MockData::saveProjHists(TFile* inFile) { // save data projection hists
+	if(histFlag == false) {
+		cout << "Histograms Not Initialized, caanot SAVE them!" << endl;
+		return;
+	}
+	inFile->cd();
+	
+	hEvisProjN0->Write();	
+	hEvisProjN1->Write();	
+	hEvisProjNall->Write();	
+	hGtagProjN0->Write();	
+	hGtagProjN1->Write();	
+	hGtagProjNall->Write();	
+	hEgN0->Write();
+	hEgN1->Write();
+	hEgNall->Write();
+	hNtagProj->Write();
+	hCosZenProj->Write();
+	hAziProj->Write();
+
+} // end of saveProjHis
+
+void MockData::doProjHists(TFile* inFile, FitPdf *inPdf) { // function to do 3 steps at once
+	initProjHists(inPdf);
+	fillProjHists();
+	saveProjHists(inFile);
+
+} // end of doProjHists
